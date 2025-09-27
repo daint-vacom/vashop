@@ -10,7 +10,7 @@ export const AuthContext = createContext<{
   saveAuth: (auth: AuthToken | undefined) => void;
   user?: IUser;
   setUser: React.Dispatch<React.SetStateAction<IUser | undefined>>;
-  login: (email: string, password: string) => Promise<void>;
+  login: (tenant: string, username: string, password: string) => Promise<void>;
   getUser: () => Promise<IUser | null>;
   logout: () => void;
   verify: () => Promise<void>;

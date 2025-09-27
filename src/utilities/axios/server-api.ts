@@ -2,13 +2,17 @@ import { getAuth } from '@/auth/lib/helpers';
 import axios from 'axios';
 import { convertDatesToISODate, convertISOStringsToDates } from '@/lib/date';
 
-const serverApiAxios = axios.create({
+const baseServerAxios = axios.create({
+  baseURL: import.meta.env.VITE_APP_API_URL,
+});
+
+const serveAxios = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL,
   // Leave headers undefined to let Axios set proper header type
   headers: undefined as any,
 });
 
-serverApiAxios.interceptors.request.use((config) => {
+serveAxios.interceptors.request.use((config) => {
   // Attach Bearer token from local storage when available
   try {
     const auth = getAuth();
@@ -31,7 +35,7 @@ serverApiAxios.interceptors.request.use((config) => {
   return config;
 });
 
-serverApiAxios.interceptors.response.use(
+serveAxios.interceptors.response.use(
   (response) => {
     try {
       // Nếu response là blob/binary (ví dụ khi tải file), không cố parse JSON/strings
@@ -59,4 +63,4 @@ serverApiAxios.interceptors.response.use(
   },
 );
 
-export { serverApiAxios };
+export { baseServerAxios, serveAxios as serverApiAxios };

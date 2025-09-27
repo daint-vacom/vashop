@@ -31,10 +31,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
     }
   };
 
-  const login = async (username: string, password: string) => {
+  const login = async (tenant: string, username: string, password: string) => {
     try {
-      const auth = await AuthAdapter.login(username, password);
-      saveAuth(auth);
+      const auth = await AuthAdapter.login(tenant, username, password);
+      saveAuth(auth.token);
       const user = await getUser();
       setCurrentUser(user);
     } catch (error) {

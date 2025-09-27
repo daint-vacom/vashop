@@ -1,13 +1,12 @@
-import { AuthToken } from '@/models/auth.model';
 import { IUser } from '@/models/user.model';
 import { jwtDecode } from 'jwt-decode';
 import { loginApi, logoutApi } from '@/services/auth.service';
 import { getAuth } from '../lib/helpers';
 
 export const AuthAdapter = {
-  login: async (userName: string, password: string): Promise<AuthToken> => {
+  login: async (tenant: string, username: string, password: string) => {
     try {
-      const token = await loginApi({ userName, password });
+      const token = await loginApi({ tenant, username, password });
       return token;
     } catch (error) {
       throw error;
@@ -22,13 +21,14 @@ export const AuthAdapter = {
     const token = getAuth();
     if (!token) throw new Error('Not logged in');
     const payload = jwtDecode(token.accessToken) as any;
-    if (!payload?.id || !payload?.username) {
+    console.log('Decoded JWT payload:', payload);
+    if (!payload?.tenantid || !payload?.preferred_username) {
       throw new Error('Invalid token payload');
     }
 
     return {
-      id: payload.id,
-      userName: payload.username,
+      tenantId: payload.tenantid,
+      username: payload.preferred_username,
     };
   },
 

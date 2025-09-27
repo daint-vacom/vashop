@@ -8,7 +8,7 @@ import { useAuth } from './context/auth-context';
  * If user is not authenticated, redirects to the login page.
  */
 export const RequireAuth = () => {
-  const { auth, verify, loading: globalLoading, activeRole } = useAuth();
+  const { auth, verify, loading: globalLoading } = useAuth();
   const location = useLocation();
   const [loading, setLoading] = useState(true);
   const verificationStarted = useRef(false);
@@ -36,7 +36,7 @@ export const RequireAuth = () => {
   }
 
   // If not authenticated, redirect to login
-  if (!auth?.accessToken || !activeRole) {
+  if (!auth?.accessToken) {
     return (
       <Navigate
         to={`/auth/signin?next=${encodeURIComponent(location.pathname)}`}
