@@ -3,7 +3,13 @@
 import { useMemo, useState } from 'react';
 import { IOrder } from '@/features/order/models/order.model';
 import { ColumnDef, RowSelectionState } from '@tanstack/react-table';
-import { Columns3Cog, Search, X } from 'lucide-react';
+import {
+  Columns3Cog,
+  FileText,
+  Printer,
+  SquarePen,
+  Trash2,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -13,8 +19,9 @@ import {
   CardTable,
   CardToolbar,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { SearchInput } from '@/components/ui/inputs/search-input';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { useCurrencyColumn } from '@/components/ui/tables/columns/hooks/use-currency-column';
 import { useDateColumn } from '@/components/ui/tables/columns/hooks/use-date-column';
 import { useNumberColumn } from '@/components/ui/tables/columns/hooks/use-number-column';
 import { useStringColumn } from '@/components/ui/tables/columns/hooks/use-string-column';
@@ -32,31 +39,13 @@ function Toolbar({
   setSearchQuery,
   table,
 }: {
-  searchQuery: string;
-  setSearchQuery: (value: string) => void;
+  searchQuery: string | undefined;
+  setSearchQuery?: (value: string) => void;
   table: any;
 }) {
   return (
     <CardToolbar>
-      <div className="relative">
-        <Search className="size-4 text-muted-foreground absolute start-3 top-1/2 -translate-y-1/2" />
-        <Input
-          placeholder="Tìm phòng ban..."
-          value={searchQuery}
-          onChange={(val) => setSearchQuery(val ?? '')}
-          className="ps-9 w-40"
-        />
-        {searchQuery.length > 0 && (
-          <Button
-            mode="icon"
-            variant="ghost"
-            className="absolute end-1.5 top-1/2 -translate-y-1/2 h-6 w-6"
-            onClick={() => setSearchQuery('')}
-          >
-            <X />
-          </Button>
-        )}
-      </div>
+      <SearchInput searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <DataGridColumnVisibility
         table={table}
         trigger={
@@ -75,9 +64,10 @@ export function OrderTable({
   totalCount,
   pagination,
   onPaginationChange,
+  search: searchValue,
+  onSearchChange,
 }: ServerSideTableProps<IOrder>) {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [searchQuery, setSearchQuery] = useState('');
 
   // Columns
   const orderNumberColumn = useStringColumn<IOrder>({
@@ -105,8 +95,8 @@ export function OrderTable({
     id: 'total-quantity',
     headerTitle: 'Tổng số lượng',
   });
-  const totalAmountColumn = useNumberColumn<IOrder>({
-    getNumber: (row) => row.totalAmount,
+  const totalAmountColumn = useCurrencyColumn<IOrder>({
+    getCurrency: (row) => row.totalAmount,
     id: 'total-amount',
     headerTitle: 'Tổng tiền',
   });
@@ -130,12 +120,39 @@ export function OrderTable({
       {
         id: 'actions',
         header: '',
-        cell: ({ row }) => null,
+        cell: () => (
+          <div className="flex gap-0.5 justify-center">
+            <Button
+              mode="icon"
+              variant="ghost"
+              size="table-action"
+              title="In hóa đơn"
+            >
+              <Printer className="text-blue-500" />
+            </Button>
+            <Button
+              mode="icon"
+              variant="ghost"
+              size="table-action"
+              title="Xuất hóa đơn điện tử"
+            >
+              <FileText className="text-purple-500" />
+            </Button>
+            <Button
+              mode="icon"
+              variant="ghost"
+              size="table-action"
+              title="Xem/Chỉnh sửa"
+            >
+              <SquarePen className="text-green-500" />
+            </Button>
+            <Button mode="icon" variant="ghost" size="table-action" title="Xóa">
+              <Trash2 className="text-destructive" />
+            </Button>
+          </div>
+        ),
         enableResizing: false,
         size: TableActionSize.buttons(4),
-        meta: {
-          headerClassName: '',
-        },
       },
     ],
     [
@@ -186,13 +203,14 @@ export function OrderTable({
           <CardHeading>
             <div className="flex flex-col">
               <span className="table-rows-count">
-                Tổng số lượng: {totalCount}
+                Số lượng đơn hàng:{' '}
+                <span className="font-medium">{totalCount}</span>
               </span>
             </div>
           </CardHeading>
           <Toolbar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
+            searchQuery={searchValue}
+            setSearchQuery={onSearchChange}
             table={table}
           />
         </CardHeader>

@@ -26,13 +26,22 @@ export const throttle = (
   };
 };
 
+export type DebouncedFunction<T extends (...args: unknown[]) => unknown> = (
+  ...args: Parameters<T>
+) => void;
+
+export type DebouncedWithCancel<T extends (...args: unknown[]) => unknown> =
+  DebouncedFunction<T> & {
+    cancel: () => void;
+  };
+
 export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number,
-): (...args: Parameters<T>) => void {
+): DebouncedFunction<T> {
   let timeout: NodeJS.Timeout | null = null;
 
-  return function (...args: Parameters<T>): void {
+  const debounced = function (...args: Parameters<T>): void {
     if (timeout) {
       clearTimeout(timeout);
     }
@@ -40,7 +49,16 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
     timeout = setTimeout(() => {
       func(...args);
     }, wait);
+  } as unknown as DebouncedWithCancel<T>;
+
+  (debounced as DebouncedWithCancel<T>).cancel = () => {
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
   };
+
+  return debounced as DebouncedWithCancel<T>;
 }
 
 export function uid(): string {

@@ -5,4 +5,8 @@ export interface ServerSideTableProps<T> {
   totalCount?: number;
   pagination: PaginationState;
   onPaginationChange: OnChangeFn<PaginationState>;
+  isLoading?: boolean;
+  // Optional quick search value and setter for server-side search
+  search?: string | undefined;
+  onSearchChange?: (value: string) => void;
 }
