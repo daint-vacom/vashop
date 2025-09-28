@@ -7,6 +7,7 @@ import {
 } from '@/layouts/main-layout/components/toolbar';
 import { FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { OrderTable } from './components/order-table';
 
 export function OrderManagementPage() {
   return (
@@ -22,7 +23,9 @@ export function OrderManagementPage() {
         </Toolbar>
       </PageContainer>
       <PageContainer>
-        <div className="page-content">abc</div>
+        <div className="page-content">
+          <OrderTable data={[]} />
+        </div>
       </PageContainer>
     </Fragment>
   );
