@@ -1,3 +1,5 @@
+import { PaymentMethod } from '@/lib/enums/payment-method.enum';
+import { OrderStatus } from '../enums/order-status.enum';
 import { IOrder } from '../models/order.model';
 import { GetOrderSchemaType } from '../schemas/get-order.schema';
 
@@ -28,8 +30,12 @@ export function getOrderMapper(input: GetOrderSchemaType): IOrder {
     totalAmount: input.totalAmount ?? null,
     cusAmount: input.cusAmount ?? null,
     returnAmount: input.returnAmount ?? null,
-    paymentMethod: input.paymentMethod ?? null,
-    orderStatus: input.orderStatus ?? null,
+    paymentMethod: input.paymentMethod
+      ? (input.paymentMethod as PaymentMethod)
+      : null,
+    orderStatus: input.orderStatus
+      ? (input.orderStatus.toLowerCase() as OrderStatus)
+      : null,
     invoiceStatus: input.invoiceStatus ?? null,
     invoiceNbr: input.invoiceNbr ?? null,
     taxCode: input.taxCode ?? null,

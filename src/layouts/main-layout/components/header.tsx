@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Breadcrumbs from '@/layouts/main-layout/components/breadcrumb';
 import { UserDropdownMenu } from '@/layouts/main-layout/components/topbar/user-dropdown-menu';
-import { Menu } from 'lucide-react';
+import { Menu, Plus } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { cn } from '@/lib/utils';
@@ -82,6 +82,9 @@ export function Header() {
         {/* HeaderTopbar */}
         <div className="flex items-center gap-5">
           <>
+            <Button variant="primary">
+              <Plus /> Bán hàng (POS)
+            </Button>
             {/* <NotificationsSheet
               trigger={
                 <BadgeContainer>

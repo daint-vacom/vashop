@@ -33,7 +33,7 @@ export const AuthAdapter = {
   },
 
   logout: async () => {
-    await logoutApi();
+    // await logoutApi();
   },
 
   requestPasswordReset: async () => {

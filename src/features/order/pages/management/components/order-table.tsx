@@ -2,11 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { IOrder } from '@/features/order/models/order.model';
-import {
-  ColumnDef,
-  PaginationState,
-  RowSelectionState,
-} from '@tanstack/react-table';
+import { ColumnDef, RowSelectionState } from '@tanstack/react-table';
 import { Columns3Cog, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -19,13 +15,17 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { useDateColumn } from '@/components/ui/tables/columns/hooks/use-date-column';
+import { useNumberColumn } from '@/components/ui/tables/columns/hooks/use-number-column';
 import { useStringColumn } from '@/components/ui/tables/columns/hooks/use-string-column';
 import { TableActionSize } from '@/components/ui/tables/config/table.config';
 import { DataGrid } from '@/components/ui/tables/data-grid';
 import { DataGridColumnVisibility } from '@/components/ui/tables/data-grid-column-visibility';
 import { DataGridPagination } from '@/components/ui/tables/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/tables/data-grid-table';
+import { ServerSideTableProps } from '@/components/ui/tables/types/server-side-table-prop';
 import { useDefaultTable } from '@/components/ui/tables/use-table';
+import { useOrderStatusColumn } from '../hooks/use-order-status-column';
 
 function Toolbar({
   searchQuery,
@@ -70,24 +70,63 @@ function Toolbar({
   );
 }
 
-export function OrderTable({ data }: { data: IOrder[] }) {
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 5,
-  });
+export function OrderTable({
+  data,
+  totalCount,
+  pagination,
+  onPaginationChange,
+}: ServerSideTableProps<IOrder>) {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [searchQuery, setSearchQuery] = useState('');
 
   // Columns
-  const idColumn = useStringColumn<IOrder>({
-    getString: (row) => row.id,
-    id: 'id',
+  const orderNumberColumn = useStringColumn<IOrder>({
+    getString: (row) => row.ordNbr,
+    id: 'order-number',
     headerTitle: 'Số phiếu',
+  });
+  const refNumberColumn = useStringColumn<IOrder>({
+    getString: (row) => row.refNbr,
+    id: 'ref-number',
+    headerTitle: 'Số chứng từ tham chiếu',
+  });
+  const customerColumn = useStringColumn<IOrder>({
+    getString: (row) => row.cusName,
+    id: 'customer',
+    headerTitle: 'Khách hàng',
+  });
+  const createdDateColumn = useDateColumn<IOrder>({
+    getDate: (row) => row.creationTime,
+    id: 'created-date',
+    headerTitle: 'Ngày tạo',
+  });
+  const totalQuantityColumn = useNumberColumn<IOrder>({
+    getNumber: (row) => row.totalAmount,
+    id: 'total-quantity',
+    headerTitle: 'Tổng số lượng',
+  });
+  const totalAmountColumn = useNumberColumn<IOrder>({
+    getNumber: (row) => row.totalAmount,
+    id: 'total-amount',
+    headerTitle: 'Tổng tiền',
+  });
+  const statusColumn = useOrderStatusColumn<IOrder>((row) => row.orderStatus);
+  const paymentMethodColumn = useStringColumn<IOrder>({
+    getString: (row) => row.paymentMethod,
+    id: 'payment-method',
+    headerTitle: 'Hình thức thanh toán',
   });
 
   const columns = useMemo<ColumnDef<IOrder>[]>(
     () => [
-      idColumn,
+      orderNumberColumn,
+      refNumberColumn,
+      customerColumn,
+      createdDateColumn,
+      totalQuantityColumn,
+      totalAmountColumn,
+      statusColumn,
+      paymentMethodColumn,
       {
         id: 'actions',
         header: '',
@@ -99,7 +138,16 @@ export function OrderTable({ data }: { data: IOrder[] }) {
         },
       },
     ],
-    [idColumn],
+    [
+      orderNumberColumn,
+      refNumberColumn,
+      customerColumn,
+      createdDateColumn,
+      totalQuantityColumn,
+      totalAmountColumn,
+      statusColumn,
+      paymentMethodColumn,
+    ],
   );
 
   const table = useDefaultTable({
@@ -108,23 +156,24 @@ export function OrderTable({ data }: { data: IOrder[] }) {
     getRowId: (row: IOrder) => row.id,
     state: {
       rowSelection,
-      globalFilter: searchQuery,
       pagination,
       columnPinning: {
         right: ['actions'],
       },
     },
-    onGlobalFilterChange: setSearchQuery,
-    onPaginationChange: setPagination,
+    manualPagination: true,
+    pageCount: Math.max(
+      0,
+      Math.ceil((totalCount ?? 0) / (pagination?.pageSize ?? 1)),
+    ),
+    onPaginationChange: onPaginationChange,
     onRowSelectionChange: setRowSelection,
   });
-
-  const filteredRowCount = table.getFilteredRowModel().rows.length;
 
   return (
     <DataGrid
       table={table}
-      recordCount={filteredRowCount}
+      recordCount={totalCount ?? 0}
       tableLayout={{
         columnsPinnable: true,
         columnsResizable: true,
@@ -137,7 +186,7 @@ export function OrderTable({ data }: { data: IOrder[] }) {
           <CardHeading>
             <div className="flex flex-col">
               <span className="table-rows-count">
-                Số lượng: {filteredRowCount}
+                Tổng số lượng: {totalCount}
               </span>
             </div>
           </CardHeading>

@@ -3,7 +3,6 @@ import { Column } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp, ChevronsUpDown, PinOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { type MultiOption } from '@/components/ui/multi-select';
 import { useDataGrid } from '@/components/ui/tables/data-grid';
 import { ColumnHeaderProvider } from './providers/column-header-provider';
 
@@ -14,7 +13,6 @@ interface DataGridColumnHeaderProps<TData, TValue>
   icon?: ReactNode;
   pinnable?: boolean;
   filter?: ReactNode;
-  options?: MultiOption[];
   visibility?: boolean;
 }
 
@@ -25,7 +23,6 @@ function DataGridColumnHeader<TData, TValue>({
   className,
   filter,
   visibility = false,
-  options,
 }: DataGridColumnHeaderProps<TData, TValue>) {
   const { isLoading, props, recordCount } = useDataGrid();
 
@@ -36,7 +33,7 @@ function DataGridColumnHeader<TData, TValue>({
     return (
       <div
         className={cn(
-          'flex-1 text-accent-foreground font-normal flex items-center gap-1.5 min-w-0 text-[0.8125rem] leading-[calc(1.125/0.8125)] [&_svg]:size-3.5 [&_svg]:opacity-60',
+          'flex-1 text-accent-foreground font-medium flex items-center gap-1.5 min-w-0 text-[0.8125rem] leading-[calc(1.125/0.8125)] [&_svg]:size-3.5 [&_svg]:opacity-60',
           className,
         )}
       >
@@ -99,12 +96,6 @@ function DataGridColumnHeader<TData, TValue>({
   };
 
   const headerControls = () => {
-    const [open, setOpen] = useState(false);
-
-    const selectedOptions = useMemo(() => {
-      return column.getFilterValue() as string[];
-    }, [column.getFilterValue()]);
-
     return (
       <div className="flex items-center h-full gap-1.5">
         {headerLabel()}
@@ -127,16 +118,13 @@ function DataGridColumnHeader<TData, TValue>({
     if (
       props.tableLayout?.columnsMovable ||
       (props.tableLayout?.columnsVisibility && visibility) ||
-      (props.tableLayout?.columnsPinnable && column.getCanPin()) ||
+      // (props.tableLayout?.columnsPinnable && column.getCanPin()) ||
       filter
     ) {
       return headerControls();
     }
 
-    if (
-      column.getCanSort() ||
-      (props.tableLayout?.columnsResizable && column.getCanResize())
-    ) {
+    if (column.getCanSort()) {
       return (
         <div className="flex items-center h-full gap-1.5">
           {headerLabel()}

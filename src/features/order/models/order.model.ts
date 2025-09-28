@@ -1,11 +1,12 @@
-import { GetOrderSchemaType } from '../schemas/get-order.schema';
+import { PaymentMethod } from '@/lib/enums/payment-method.enum';
+import { OrderStatus } from '../enums/order-status.enum';
 
 export interface IOrder {
-  ordNbr: string;
+  ordNbr: string; // Số phiếu
   ordDate: Date | null;
   cusId: string | null;
   cusCode: string | null;
-  cusName: string | null;
+  cusName: string | null; // Khách hàng
   address: string | null;
   tel: string | null;
   buyerIdentityCard: string | null;
@@ -16,11 +17,11 @@ export interface IOrder {
   totalDiscount: number | null;
   taxAmount: number | null;
   taxReductionAmount: number | null;
-  totalAmount: number | null;
+  totalAmount: number | null; // Tổng tiền
   cusAmount: number | null;
   returnAmount: number | null;
-  paymentMethod: string | null;
-  orderStatus: string | null;
+  paymentMethod: PaymentMethod | null; // Hình thức thanh toán
+  orderStatus: OrderStatus | null; // Trạng thái
   invoiceStatus: string | null;
   invoiceNbr: string | null;
   taxCode: string | null;
@@ -40,14 +41,11 @@ export interface IOrder {
   toWarehouseId: string | null;
   isVat: boolean | null;
   refId: string | null;
-  refNbr: string | null;
+  refNbr: string | null; // Số chứng từ tham chiếu
   tenantId: string | null;
   id: string;
-  creationTime: Date | null;
+  creationTime: Date | null; // Ngày tạo
   creatorId: string | null;
   lastModificationTime: Date | null;
   lastModifierId: string | null;
 }
-
-// Export a helper type if needed for mappers
-export type OrderInput = GetOrderSchemaType;

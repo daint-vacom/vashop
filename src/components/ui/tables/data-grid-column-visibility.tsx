@@ -32,7 +32,6 @@ function DataGridColumnVisibility<TData>({
             return (
               <DropdownMenuCheckboxItem
                 key={column.id}
-                className="capitalize"
                 checked={column.getIsVisible()}
                 onSelect={(event) => event.preventDefault()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
