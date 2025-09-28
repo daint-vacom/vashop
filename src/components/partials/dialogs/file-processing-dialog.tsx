@@ -1,7 +1,6 @@
 import { PropsWithChildren } from 'react';
-import { SingleFileUploadSchemaType } from '@/schemas/utils/file.schema';
+import { SingleFileUploadSchemaType } from '@/schemas/types/file.schema';
 import { LoaderCircleIcon } from 'lucide-react';
-import { FormDialogProps } from '@/lib/types/dialog-props';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -19,6 +18,7 @@ import {
 } from '@/components/ui/form';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SingleFileUpload } from '@/components/ui/single-file-upload';
+import { FormDialogProps } from '@/components/partials/dialogs/dialog-props';
 
 interface Props extends FormDialogProps<SingleFileUploadSchemaType> {
   canEdit?: boolean;

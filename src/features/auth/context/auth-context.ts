@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
-import { AuthToken } from '@/models/auth.model';
-import { IUser } from '@/models/user.model';
+import { AuthToken } from '@/features/auth/models/auth.model';
+import { IUser } from '@/features/auth/models/user.model';
 
 // Create AuthContext with types
 export const AuthContext = createContext<{

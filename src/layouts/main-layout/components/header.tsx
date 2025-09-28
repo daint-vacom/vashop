@@ -15,7 +15,7 @@ import {
   SheetHeader,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Container } from '@/components/common/container';
+import { PageContainer } from './containers/container';
 import { SidebarMenu } from './sidebar-menu';
 
 export function Header() {
@@ -59,7 +59,7 @@ export function Header() {
         headerSticky && 'border-b border-border',
       )}
     >
-      <Container className="flex justify-between items-stretch lg:gap-4">
+      <PageContainer className="flex justify-between items-stretch lg:gap-4">
         {/* HeaderLogo */}
         <div className="flex lg:hidden items-center gap-2.5">
           <Link to="/" className="shrink-0">
@@ -137,7 +137,7 @@ export function Header() {
             />
           </>
         </div>
-      </Container>
+      </PageContainer>
     </header>
   );
 }

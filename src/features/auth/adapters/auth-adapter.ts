@@ -1,6 +1,6 @@
-import { IUser } from '@/models/user.model';
+import { IUser } from '@/features/auth/models/user.model';
+import { loginApi, logoutApi } from '@/features/auth/services/auth.service';
 import { jwtDecode } from 'jwt-decode';
-import { loginApi, logoutApi } from '@/services/auth.service';
 import { getAuth } from '../lib/helpers';
 
 export const AuthAdapter = {

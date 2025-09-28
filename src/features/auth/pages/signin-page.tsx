@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '@/auth/context/auth-context';
+import { useAuth } from '@/features/auth/context/auth-context';
 import {
   getSigninSchema,
   SigninSchemaType,
-} from '@/schemas/auth/signin.schema';
+} from '@/features/auth/schemas/signin.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircle, Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
