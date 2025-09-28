@@ -39,14 +39,14 @@ export function Sidebar() {
       className="relative sidebar bg-background lg:border-e lg:border-border lg:fixed lg:top-0 lg:bottom-0 lg:z-20 lg:flex flex-col items-stretch shrink-0 gap-y-7.5 py-5 px-5"
     >
       <SidebarHeader />
-      <SidebarMenu />
+      <SidebarMenu isSmall={isSmall} />
       <Button
         onClick={handleToggleClick}
         size="sm"
         mode="icon"
         variant="outline"
         className={cn(
-          'size-7 absolute start-full top-7.5 rtl:translate-x-2/4 -translate-x-2/4 -translate-y-2/4',
+          'top-[calc(var(--header-height)/2)] size-7 absolute start-full not-[]:rtl:translate-x-2/4 -translate-x-2/4 -translate-y-2/4',
           settings.layouts.demo1.sidebarCollapse
             ? 'ltr:rotate-180'
             : 'rtl:rotate-180',

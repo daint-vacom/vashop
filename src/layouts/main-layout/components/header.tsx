@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Breadcrumbs from '@/layouts/main-layout/components/breadcrumb';
 import { UserDropdownMenu } from '@/layouts/main-layout/components/topbar/user-dropdown-menu';
 import { Menu } from 'lucide-react';
@@ -6,7 +6,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { useScrollPosition } from '@/hooks/use-scroll-position';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -20,32 +19,11 @@ import { SidebarMenu } from './sidebar-menu';
 
 export function Header() {
   const [isSidebarSheetOpen, setIsSidebarSheetOpen] = useState(false);
-  const [isSmall, setIsSmall] = useState(false);
 
   // const { statistics: notiStats } = useNoti();
 
   const { pathname } = useLocation();
   const mobileMode = useIsMobile();
-
-  const scrollPosition = useScrollPosition();
-  const headerSticky: boolean = scrollPosition > 0;
-
-  const parentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const width = entry.contentRect.width;
-        setIsSmall(width < 100); // Ngưỡng chiều rộng để xác định "nhỏ"
-      }
-    });
-
-    if (parentRef.current) {
-      observer.observe(parentRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   // Close sheet when route changes
   useEffect(() => {
@@ -55,8 +33,7 @@ export function Header() {
   return (
     <header
       className={cn(
-        'header fixed top-0 z-10 start-0 flex items-stretch shrink-0 border-b border-transparent bg-background end-0 pe-[var(--removed-body-scroll-bar-size,0px)]',
-        headerSticky && 'border-b border-border',
+        'header fixed top-0 z-10 start-0 flex items-stretch shrink-0 bg-background end-0 pe-[var(--removed-body-scroll-bar-size,0px)] border-b border-border',
       )}
     >
       <PageContainer className="flex justify-between items-stretch lg:gap-4">
@@ -64,8 +41,8 @@ export function Header() {
         <div className="flex lg:hidden items-center gap-2.5">
           <Link to="/" className="shrink-0">
             <img
-              src={toAbsoluteUrl('/media/logos/evn-genco3-no-text.png')}
-              className="h-[25px] w-full"
+              src={toAbsoluteUrl('/media/logos/logo.png')}
+              className="size-6"
               alt="mini-logo"
             />
           </Link>

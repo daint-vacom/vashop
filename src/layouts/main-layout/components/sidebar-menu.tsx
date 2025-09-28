@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/accordion-menu';
 import { Badge } from '@/components/ui/badge';
 
-export function SidebarMenu() {
+export function SidebarMenu({ isSmall }: { isSmall?: boolean }) {
   const { pathname } = useLocation();
 
   const menuConfig = MENU_SIDEBAR;
@@ -146,7 +146,7 @@ export function SidebarMenu() {
           key={index}
           value={item.path || `child-${level}-${index}`}
         >
-          <AccordionMenuSubTrigger className="text-[13px]">
+          <AccordionMenuSubTrigger className="text-sm">
             {item.collapse ? (
               <span className="text-muted-foreground">
                 <span className="hidden [[data-state=open]>span>&]:inline">
@@ -184,7 +184,7 @@ export function SidebarMenu() {
         <AccordionMenuItem
           key={index}
           value={item.path || ''}
-          className="text-[13px] truncate"
+          className="text-sm truncate"
         >
           <Link to={item.path || '#'}>{item.title}</Link>
         </AccordionMenuItem>
@@ -201,7 +201,7 @@ export function SidebarMenu() {
       <AccordionMenuItem
         key={index}
         value={`disabled-child-${level}-${index}`}
-        className="text-[13px]"
+        className="text-sm"
       >
         <span data-slot="accordion-menu-title">{item.title}</span>
         {item.disabled && (
@@ -218,7 +218,12 @@ export function SidebarMenu() {
   };
 
   return (
-    <div className="kt-scrollable-y-hover flex grow shrink-0 lg:max-h-[calc(100vh-14.5rem)]">
+    <div
+      className={cn(
+        'flex grow shrink-0 lg:max-h-[calc(100vh-7.5rem)] overflow-x-hidden',
+        isSmall ? 'overflow-y-hidden' : 'kt-scrollable-y-hover',
+      )}
+    >
       <AccordionMenu
         selectedValue={pathname}
         matchPath={matchPath}
