@@ -3,6 +3,7 @@ import { useAuth } from '@/features/auth/context/auth-context';
 import { RequireAuth } from '@/features/auth/require-auth';
 import { ErrorRouting } from '@/features/errors/error-routing';
 import { HomePage } from '@/features/home';
+import { OrderManagementPage } from '@/features/order/pages/management';
 import { MainLayout } from '@/layouts/main-layout/layout';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROUTE_PATHS } from './paths';
@@ -15,7 +16,12 @@ export function AppRoutingSetup() {
 
       <Route element={<RequireAuth />}>
         <Route element={<MainLayout />}>
-          <Route path="/" element={<HomePage />} />
+          <Route path={ROUTE_PATHS.HOME} element={<HomePage />} />
+
+          <Route
+            path={ROUTE_PATHS.ORDER_MANAGEMENT}
+            element={<OrderManagementPage />}
+          />
         </Route>
 
         <Route path="*" element={<Navigate to={ROUTE_PATHS.ERROR_404} />} />

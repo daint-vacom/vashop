@@ -135,4 +135,8 @@
   .table-header {
     @apply text-secondary-foreground! h-10! font-normal!;
   }
+
+  .page-content {
+    @apply grid gap-5 lg:gap-7.5;
+  }
 }

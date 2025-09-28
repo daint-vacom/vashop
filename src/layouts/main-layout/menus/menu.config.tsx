@@ -23,6 +23,7 @@ export const MENU_SIDEBAR: MenuConfig = [
   {
     title: 'Danh Sách Đơn Hàng',
     icon: Logs,
+    path: ROUTE_PATHS.ORDER_MANAGEMENT,
   },
   {
     title: 'Hàng hóa & Dịch vụ',
