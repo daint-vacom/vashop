@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '@/auth/context/auth-context';
+import { useAuth } from '@/features/auth/context/auth-context';
 import { useLocation } from 'react-router-dom';
 import { useLoadingBar } from 'react-top-loading-bar';
 import { AppRoutingSetup } from './app-routing-setup';

@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { HashRouter } from 'react-router-dom';
 import { LoadingBarContainer } from 'react-top-loading-bar';
 import { Toaster } from '@/components/ui/sonner';
-import { AuthProvider } from './auth/providers/auth-provider';
+import { AuthProvider } from './features/auth/providers/auth-provider';
 import { BreadcrumbProvider } from './layouts/main-layout/components/breadcrumb';
 import { I18nProvider } from './providers/i18n-provider';
 import { QueryProvider } from './providers/query-provider';

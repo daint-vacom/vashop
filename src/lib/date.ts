@@ -21,49 +21,10 @@ export function formatMonthYear(date: Date | undefined | null) {
   return date ? format(date, "'Tháng' M/yyyy") : '';
 }
 
-export function toDate(val: Date | string | null | undefined): Date | null {
-  if (!val) return null;
-  if (val instanceof Date) return val;
-  if (typeof val === 'string') {
-    // Try to parse as dd/MM/yyyy first to avoid US-style month/day swap
-    try {
-      const parsed = parse(val, 'dd/MM/yyyy', new Date());
-      if (isValid(parsed)) return parsed;
-    } catch (e) {
-      // ignore and fallback
-    }
-    const fallback = new Date(val);
-    return isValid(fallback) ? fallback : null;
-  }
-  return null;
-}
-
-export function toDateWithNull(str: string | Date | null) {
-  if (!str) return null;
-  if (str instanceof Date) return str;
-  // Chuyển sang định dạng chuẩn trước khi parse
-  return new Date(str);
-}
-
 export function monthsToYear(numOfMoths: number | null | undefined) {
   if (numOfMoths === null || numOfMoths === undefined) return '';
 
   return Math.floor(numOfMoths / 12);
-}
-
-export function displayMonthYear(numOfMoths: number | null | undefined) {
-  if (numOfMoths === null || numOfMoths === undefined) return '';
-
-  const years = Math.floor(numOfMoths / 12);
-  const months = numOfMoths % 12;
-
-  if (years === 0) {
-    return `${months} tháng`;
-  }
-  if (months === 0) {
-    return `${years} năm`;
-  }
-  return `${years} năm ${months} tháng`;
 }
 
 export function formatDiffInYearMonth(from: Date, to: Date | null) {
@@ -164,12 +125,7 @@ export function isTodayInRange({
   return today >= startDate && today <= endDate;
 }
 
-export function displayDateTime(date: Date | undefined | null) {
-  if (!date) return '';
-  return format(date, "HH:mm 'ngày' dd/MM/yyyy");
-}
-
-export function displayDateTimeRange(start?: Date | null, end?: Date | null) {
+export function formatDateTimeRange(start?: Date | null, end?: Date | null) {
   if (!start) {
     // Nếu không có startDate thì không hiển thị gì
     return '';

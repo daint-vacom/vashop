@@ -1,9 +1,9 @@
-import { Container } from '@/components/common/container';
+import { PageContainer } from '@/layouts/main-layout/components/containers/container';
 
 export function HomePage() {
   return (
-    <Container>
-      <h1 className="home-title">TRANG QUẢN LÝ ĐÀO TẠO & TỔ CHỨC THI</h1>
-    </Container>
+    <PageContainer>
+      <h1 className="home-title">VACOM vaShop</h1>
+    </PageContainer>
   );
 }

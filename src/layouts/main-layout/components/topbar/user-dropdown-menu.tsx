@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { useAuth } from '@/auth/context/auth-context';
+import { useAuth } from '@/features/auth/context/auth-context';
 import { ROUTE_PATHS } from '@/routing/paths';
 import { RotateCcwKey } from 'lucide-react';
 import { Link } from 'react-router-dom';

@@ -1,4 +1,4 @@
-import { getAuth } from '@/auth/lib/helpers';
+import { getAuth } from '@/features/auth/lib/helpers';
 import axios from 'axios';
 import { convertDatesToISODate, convertISOStringsToDates } from '@/lib/date';
 

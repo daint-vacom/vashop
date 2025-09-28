@@ -1,6 +1,6 @@
-import { AuthToken } from '@/models/auth.model';
-import { ChangePasswordSchemaType } from '@/schemas/auth/change-password.schema';
-import { SigninSchemaType } from '@/schemas/auth/signin.schema';
+import { AuthToken } from '@/features/auth/models/auth.model';
+import { ChangePasswordSchemaType } from '@/features/auth/schemas/change-password.schema';
+import { SigninSchemaType } from '@/features/auth/schemas/signin.schema';
 import { baseServerAxios, serverApiAxios } from '@/utilities/axios/server-api';
 import { getTenantIdApi } from './tenant.service';
 

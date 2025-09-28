@@ -1,4 +1,4 @@
-import { AuthToken } from '@/models/auth.model';
+import { AuthToken } from '@/features/auth/models/auth.model';
 import { getData, setData } from '@/lib/storage';
 import KEY_STORAGE from './config';
 

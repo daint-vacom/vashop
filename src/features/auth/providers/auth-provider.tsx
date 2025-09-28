@@ -1,8 +1,8 @@
 import { PropsWithChildren, useState } from 'react';
-import { AuthContext } from '@/auth/context/auth-context';
-import * as authHelper from '@/auth/lib/helpers';
-import { AuthToken } from '@/models/auth.model';
-import { IUser } from '@/models/user.model';
+import { AuthContext } from '@/features/auth/context/auth-context';
+import * as authHelper from '@/features/auth/lib/helpers';
+import { AuthToken } from '@/features/auth/models/auth.model';
+import { IUser } from '@/features/auth/models/user.model';
 import { AuthAdapter } from '../adapters/auth-adapter';
 
 export function AuthProvider({ children }: PropsWithChildren) {
