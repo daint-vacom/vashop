@@ -15,7 +15,7 @@ export function OrderDetailGeneralInfo() {
   return (
     <Card className="basis-3/5">
       <CardHeader id="order-detail-general-info">
-        <CardTitle className="text-primary">Thông tin chung</CardTitle>
+        <CardTitle>Thông tin chung</CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-2 form-spacing">
         <FormField

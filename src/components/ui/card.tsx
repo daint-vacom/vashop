@@ -201,7 +201,7 @@ function CardTitle({
     <h3
       data-slot="card-title"
       className={cn(
-        'text-base font-semibold leading-none tracking-tight',
+        'text-base font-bold leading-none tracking-tight text-primary',
         className,
       )}
       {...props}

@@ -58,7 +58,7 @@ export function OrderDetailSummary() {
         <Button variant="secondary">
           <Save /> Lưu tạm
         </Button>
-        <Button>
+        <Button variant="primary" type="submit">
           <HandCoins /> Thanh toán
         </Button>
       </CardFooter>

@@ -230,7 +230,7 @@ export function OrderDetailDocumentDetail() {
     >
       <Card>
         <CardHeader id="order-detail-document-detail">
-          <CardTitle className="text-primary">Chi tiết chứng từ</CardTitle>
+          <CardTitle>Chi tiết chứng từ</CardTitle>
           <CardToolbar>
             <FormField
               control={form.control}

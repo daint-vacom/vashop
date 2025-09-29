@@ -402,12 +402,14 @@ function Button({
   children,
   loading,
   loadingContent,
+  type = 'button',
   ...props
 }: ButtonProps) {
   const Comp = asChild ? SlotPrimitive.Slot : 'button';
   return (
     <Comp
       data-slot="button"
+      type={type}
       className={cn(
         buttonVariants({
           variant,

@@ -20,10 +20,17 @@ export function OrderDetailForm() {
     ) as unknown as Resolver<EditOrderSchemaType>,
   });
 
+  const handleSubmit = (data: EditOrderSchemaType) => {};
+
+  const onError = (err: any) => {
+    console.log('❌ Lỗi form:', err);
+    console.log('form', form.getValues());
+  };
+
   return (
     <OrderDetailProvider form={form}>
       <Form {...form}>
-        <form role="form">
+        <form role="form" onSubmit={form.handleSubmit(handleSubmit, onError)}>
           <div className="page-content">
             <div className="page-content-spacing flex flex-row">
               <OrderDetailGeneralInfo />

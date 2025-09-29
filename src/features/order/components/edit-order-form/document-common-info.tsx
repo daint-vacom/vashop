@@ -15,7 +15,7 @@ export function OrderDetailDocumentCommonInfo() {
   return (
     <Card className="basis-2/5">
       <CardHeader id="order-detail-document-common-info">
-        <CardTitle className="text-primary">Chứng từ</CardTitle>
+        <CardTitle>Chứng từ</CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-2 form-spacing">
         <FormField
