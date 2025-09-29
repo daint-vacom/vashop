@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 import { advancedSearch } from '@/lib/search';
 import {
   Command,
@@ -16,55 +16,53 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-interface Option {
+interface Option<TData = unknown> {
   value: string;
-  label: string;
-  data?: any;
+  data?: TData;
+  searchableValue?: string;
 }
 
-interface SuggestionInputProps extends InputProps {
-  options?: Array<Option>;
-  buildItem?: (option: Option) => ReactNode;
+interface SuggestionInputProps<TData = unknown> extends InputProps {
+  options?: Array<Option<TData>>;
+  renderOption: (option: Option<TData>) => ReactNode;
   searchPlaceholder?: string;
   emptyMessage?: string;
   modal?: boolean;
+  manualFilter?: boolean;
+  onSelectOption?: (option: Option<TData>) => void;
 }
 
-export function SuggestionInput({
+export function SuggestionInput<TData = unknown>({
   options = [],
-  buildItem = (option) => option.label,
+  renderOption,
   value,
   onChange,
   placeholder,
   emptyMessage = 'Không tìm thấy giá trị',
   modal,
+  manualFilter = false,
+  onSelectOption,
   ...props
-}: SuggestionInputProps) {
+}: SuggestionInputProps<TData>) {
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState<string>(
     value ? String(value) : '',
   );
 
-  useEffect(() => {
-    const newSelected = value ? String(value) : '';
-    const label =
-      options.find((o) => o.value === newSelected)?.label || newSelected;
-    setInputValue(label);
-  }, [value, options]);
-
-  const filteredOptions = options.filter((option) =>
-    advancedSearch(option.label, inputValue),
-  );
+  const filteredOptions = useMemo(() => {
+    if (manualFilter) return options;
+    return options.filter((option) =>
+      advancedSearch(option.searchableValue || option.value, inputValue),
+    );
+  }, [manualFilter, options, inputValue]);
 
   const onInputBlur = () => {
-    // Don't close immediately - let setTimeout handle it to allow for command list interaction
     setTimeout(() => {
-      // Check if focus has moved to the command list
       if (!document.activeElement?.closest('[cmdk-list]')) {
         setOpen(false);
-
-        // Reset value only if it's not a valid option
-        if (!options.some((o) => o.label === inputValue)) {
+        if (
+          !options.some((o) => (o.searchableValue || o.value) === inputValue)
+        ) {
           onChange?.('');
           setInputValue('');
         }
@@ -72,11 +70,14 @@ export function SuggestionInput({
     }, 150);
   };
 
-  const onSelectItem = (selectedLabel: string) => {
-    const option = options.find((o) => o.label === selectedLabel);
+  const onSelectItem = (selectedValue: string) => {
+    setInputValue(selectedValue);
+    onChange?.(selectedValue);
+    const option = options.find(
+      (o) => (o.searchableValue || o.value) === selectedValue,
+    );
     if (option) {
-      setInputValue(selectedLabel);
-      onChange?.(option.value);
+      onSelectOption?.(option);
     }
     setOpen(false);
   };
@@ -84,7 +85,7 @@ export function SuggestionInput({
   return (
     <Popover open={open} onOpenChange={setOpen} modal={modal}>
       <PopoverTrigger asChild>
-        <div className="relative">
+        <div className="relative flex-1">
           <Input
             placeholder={placeholder}
             value={inputValue}
@@ -123,11 +124,11 @@ export function SuggestionInput({
               {filteredOptions.map((option) => (
                 <CommandItem
                   key={option.value}
-                  value={option.label}
+                  value={option.searchableValue || option.value}
                   onMouseDown={(e) => e.preventDefault()}
                   onSelect={onSelectItem}
                 >
-                  {buildItem(option)}
+                  {renderOption(option)}
                 </CommandItem>
               ))}
             </CommandGroup>

@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { SuggestionInput } from '@/components/ui/inputs/suggestion-input.tsx';
 import { SelectSearch } from '@/components/ui/select-search';
 import { useOrderDetail } from '../../providers/order-detail-provider.tsx';
 
@@ -28,10 +29,24 @@ export function OrderDetailGeneralInfo() {
               <FormLabel required>Mã đối tác</FormLabel>
               <FormControl>
                 <div className="flex gap-2.5">
-                  <Input placeholder="Nhập mã đối tác" {...field} />
+                  <SuggestionInput
+                    placeholder="Nhập mã đối tác"
+                    {...field}
+                    options={[
+                      {
+                        data: 'NCC001 - Công ty TNHH Thương Mại Dịch Vụ ABC',
+                        value: 'NCC001ABC',
+                      },
+                      {
+                        data: 'NCC002 - Công ty Cổ Phần XYZ',
+                        value: 'NCC002',
+                      },
+                    ]}
+                    renderOption={(option) => option.data}
+                  />
                   <Button
                     variant={'secondary'}
-                    mode="icon"
+                    size={'icon'}
                     title="Thêm đối tác mới"
                   >
                     <Plus />
@@ -49,7 +64,16 @@ export function OrderDetailGeneralInfo() {
             <FormItem>
               <FormLabel required>Tên đối tác</FormLabel>
               <FormControl>
-                <Input placeholder="Nhập tên đối tác" {...field} />
+                <div className="flex gap-2.5">
+                  <Input placeholder="Nhập tên đối tác" {...field} />
+                  <Button
+                    variant={'secondary'}
+                    size={'icon'}
+                    title="Thêm đối tác mới"
+                  >
+                    <Plus />
+                  </Button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
