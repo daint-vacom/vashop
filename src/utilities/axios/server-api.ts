@@ -1,6 +1,26 @@
-import { getAuth } from '@/features/auth/lib/helpers';
+import { getAuth, removeAuth, setAuth } from '@/features/auth/lib/helpers';
 import axios from 'axios';
 import { convertDatesToISODate, convertISOStringsToDates } from '@/lib/date';
+
+let isRefreshing = false;
+let refreshSubscribers: ((token: string) => void)[] = [];
+
+const BASE_URL = import.meta.env.VITE_APP_API_URL;
+
+const processQueue = (error: any, token: string | null = null) => {
+  refreshSubscribers.forEach((callback) => {
+    if (error) {
+      callback(error);
+    } else if (token) {
+      callback(token);
+    }
+  });
+  refreshSubscribers = [];
+};
+
+const onRefreshed = (token: string) => {
+  processQueue(null, token);
+};
 
 const baseServerAxios = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL,
@@ -50,7 +70,7 @@ serveAxios.interceptors.response.use(
     }
     return response;
   },
-  (error) => {
+  async (error) => {
     // Nếu response lỗi từ server có payload chứa các ISO string, parse luôn để dễ xử lý lỗi ở client
     try {
       if (error?.response?.data) {
@@ -59,7 +79,54 @@ serveAxios.interceptors.response.use(
     } catch (err) {
       // ignore
     }
-    return Promise.reject(error);
+
+    const originalRequest = error.config;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        return new Promise((resolve) => {
+          refreshSubscribers.push((token) => {
+            originalRequest.headers['Authorization'] = 'Bearer ' + token;
+            resolve(serveAxios(originalRequest));
+          });
+        });
+      }
+      originalRequest._retry = true;
+      isRefreshing = true;
+      const refreshToken = getAuth()?.refreshToken;
+      if (!refreshToken) {
+        removeAuth();
+        window.location.href = '/login';
+        return Promise.reject(new Error('No refresh token available.'));
+      }
+      try {
+        const params = new URLSearchParams();
+        params.append('grant_type', 'refresh_token');
+        params.append('refresh_token', refreshToken);
+        params.append('client_id', 'VacomMartApi_App');
+        const { data: tokenData } = await axios.post(
+          `${BASE_URL}/connect/token`,
+          params,
+          { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+        );
+        setAuth({
+          accessToken: tokenData.access_token,
+          refreshToken: tokenData.refresh_token,
+        });
+        serveAxios.defaults.headers.common['Authorization'] =
+          'Bearer ' + tokenData.access_token;
+        originalRequest.headers['Authorization'] =
+          'Bearer ' + tokenData.access_token;
+        onRefreshed(tokenData.access_token);
+        return serveAxios(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError, null);
+        alert('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+    return Promise.reject(error.response?.data || error);
   },
 );
 
