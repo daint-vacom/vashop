@@ -21,9 +21,14 @@ const inputVariants = cva(
         md: 'h-8.5 px-3 text-[0.8125rem] leading-(--text-sm--line-height) rounded-md file:pe-3 file:me-3',
         sm: 'h-7 px-2.5 text-xs rounded-md file:pe-2.5 file:me-2.5',
       },
+      width: {
+        full: '',
+        sm: 'w-20',
+      },
     },
     defaultVariants: {
       variant: 'md',
+      width: 'full',
     },
   },
 );
@@ -119,9 +124,10 @@ const inputWrapperVariants = cva(
 export interface InputProps
   extends Omit<
     React.ComponentProps<'input'>,
-    'onChange' | 'defaultValue' | 'value'
+    'onChange' | 'defaultValue' | 'value' | 'width'
   > {
   variant?: VariantProps<typeof inputVariants>['variant'];
+  width?: VariantProps<typeof inputVariants>['width'];
   emptyAs?: 'string' | 'null' | 'undefined';
   defaultValue?: string;
   onChange?: (value: string | null | undefined) => void;
@@ -130,6 +136,7 @@ export interface InputProps
   // mask props
   mask?: 'number' | 'regex';
   maskOptions?: Record<string, any>;
+  maxValue?: number;
 }
 
 function Input({
@@ -138,10 +145,12 @@ function Input({
   className,
   type,
   variant,
+  width,
   emptyAs = 'string',
   onChange,
   mask,
   maskOptions,
+  maxValue,
   ...props
 }: InputProps) {
   const buildEmptyValue = () => {
@@ -151,7 +160,7 @@ function Input({
   };
 
   const commonProps = {
-    className: cn(inputVariants({ variant }), className),
+    className: cn(inputVariants({ variant, width }), className),
     value: value ?? defaultValue ?? '',
     onChange: (e: any) => {
       const val = e.target.value;

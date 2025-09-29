@@ -76,7 +76,7 @@ const formItemVariants = cva('flex gap-2.5', {
   variants: {
     orient: {
       vertical: 'flex-col',
-      horizontal: 'sm:flex-row sm:items-center sm:gap-4',
+      horizontal: 'sm:flex-row sm:items-center gap-1.5',
     },
   },
   defaultVariants: {

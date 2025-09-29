@@ -1,3 +1,5 @@
+import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button.tsx';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   FormControl,
@@ -25,7 +27,16 @@ export function OrderDetailGeneralInfo() {
             <FormItem>
               <FormLabel required>Mã đối tác</FormLabel>
               <FormControl>
-                <Input placeholder="Nhập mã đối tác" {...field} />
+                <div className="flex gap-2.5">
+                  <Input placeholder="Nhập mã đối tác" {...field} />
+                  <Button
+                    variant={'secondary'}
+                    mode="icon"
+                    title="Thêm đối tác mới"
+                  >
+                    <Plus />
+                  </Button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

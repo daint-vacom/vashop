@@ -20,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { IconInput } from '@/components/ui/inputs/icon-input';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useNumberColumn } from '@/components/ui/tables/columns/hooks/use-number-column';
 import { useStringColumn } from '@/components/ui/tables/columns/hooks/use-string-column';
@@ -237,9 +237,32 @@ export function OrderDetailDocumentDetail() {
               name="test"
               render={({ field }) => (
                 <FormItem orient="horizontal">
-                  <FormLabel size="sm">CK Chung</FormLabel>
+                  <FormLabel size="sm">CK chung:</FormLabel>
                   <FormControl>
-                    <Input placeholder="%" {...field} />
+                    <IconInput
+                      {...field}
+                      trailing={'%'}
+                      width={'sm'}
+                      mask="number"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="test"
+              render={({ field }) => (
+                <FormItem orient="horizontal">
+                  <FormLabel size="sm">Giảm trừ:</FormLabel>
+                  <FormControl>
+                    <IconInput
+                      {...field}
+                      trailing={'%'}
+                      width={'sm'}
+                      mask="number"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

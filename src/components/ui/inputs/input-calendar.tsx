@@ -15,7 +15,7 @@ import { TimePickerInput } from './time-picker';
 interface InputCalendarProps
   extends Omit<
     React.ComponentProps<'input'>,
-    'value' | 'onChange' | 'defaultValue'
+    'value' | 'onChange' | 'defaultValue' | 'width'
   > {
   value?: Date | string;
   onChange?: (value: string | null | undefined) => void;

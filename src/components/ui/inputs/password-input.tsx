@@ -3,7 +3,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '../button';
 import { Input, InputProps } from '../input';
 
-export function PasswordInput({ children, ...props }: InputProps) {
+export function PasswordInput({ ...props }: InputProps) {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   return (
