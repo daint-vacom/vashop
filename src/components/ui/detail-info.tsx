@@ -7,6 +7,7 @@ const labelVariants = cva('text-sm text-secondary-foreground', {
       lg: 'w-[160px]',
       md: 'w-[120px]',
       sm: 'w-[80px]',
+      full: 'w-full',
     },
   },
   defaultVariants: {
@@ -28,15 +29,26 @@ function DetailInfoLabel({
   return <div className={cn(labelVariants({ size }), className)} {...props} />;
 }
 
+const contentVariants = cva('text-sm text-mono font-medium shrink-0', {
+  variants: {
+    align: {
+      right: 'text-right',
+      left: 'text-left',
+      center: 'text-center',
+    },
+  },
+  defaultVariants: {
+    align: 'left',
+  },
+});
+
 function DetailInfoContent({
   className,
+  align,
   ...props
-}: React.ComponentProps<'div'>) {
+}: React.ComponentProps<'div'> & VariantProps<typeof contentVariants>) {
   return (
-    <div
-      className={cn('text-sm text-mono font-medium', className)}
-      {...props}
-    />
+    <div className={cn(contentVariants({ align }), className)} {...props} />
   );
 }
 

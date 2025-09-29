@@ -11,7 +11,16 @@ import {
   CardStatistic,
   CardTable,
   CardTitle,
+  CardToolbar,
 } from '@/components/ui/card';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useNumberColumn } from '@/components/ui/tables/columns/hooks/use-number-column';
 import { useStringColumn } from '@/components/ui/tables/columns/hooks/use-string-column';
@@ -20,11 +29,11 @@ import { DataGrid } from '@/components/ui/tables/data-grid';
 import { DataGridTable } from '@/components/ui/tables/data-grid-table';
 import { useDefaultTable } from '@/components/ui/tables/use-table';
 import { IDocumentDetailItem } from '../../models/document-detail.model';
+import { useOrderDetail } from '../../providers/order-detail-provider';
 
-export interface Props {}
-
-export function OrderDetailDocumentDetail({}: Props) {
+export function OrderDetailDocumentDetail() {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const { form } = useOrderDetail();
 
   const data: IDocumentDetailItem[] = [
     {
@@ -222,10 +231,27 @@ export function OrderDetailDocumentDetail({}: Props) {
       <Card>
         <CardHeader id="order-detail-document-detail">
           <CardTitle className="text-primary">Chi tiết chứng từ</CardTitle>
-          <Button variant="primary">
-            <PlusCircle />
-            Thêm sản phẩm
-          </Button>
+          <CardToolbar>
+            <FormField
+              control={form.control}
+              name="test"
+              render={({ field }) => (
+                <FormItem orient="horizontal">
+                  <FormLabel size="sm">CK Chung</FormLabel>
+                  <FormControl>
+                    <Input placeholder="%" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="vertical-separator" />
+            <Button variant="primary">
+              <PlusCircle />
+              Thêm sản phẩm
+            </Button>
+            <Button variant="outline">Nhập từ phiếu</Button>
+          </CardToolbar>
         </CardHeader>
         <CardContent className="p-0">
           <CardTable>

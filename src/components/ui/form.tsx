@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
+import { cva, VariantProps } from 'class-variance-authority';
 import { Label as LabelPrimitive } from 'radix-ui';
 import {
   Controller,
@@ -71,10 +72,23 @@ const FormItemContext = React.createContext<FormItemContextValue>(
   {} as FormItemContextValue,
 );
 
+const formItemVariants = cva('flex gap-2.5', {
+  variants: {
+    orient: {
+      vertical: 'flex-col',
+      horizontal: 'sm:flex-row sm:items-center sm:gap-4',
+    },
+  },
+  defaultVariants: {
+    orient: 'vertical',
+  },
+});
+
 function FormItem({
   className,
+  orient,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: React.ComponentProps<'div'> & VariantProps<typeof formItemVariants>) {
   const id = React.useId();
   const { error } = useFormField();
 
@@ -82,7 +96,7 @@ function FormItem({
     <FormItemContext.Provider value={{ id }}>
       <div
         data-slot="form-item"
-        className={cn('flex flex-col gap-2.5', className)}
+        className={cn(formItemVariants({ orient }), className)}
         data-invalid={!!error}
         {...props}
       />
@@ -106,18 +120,36 @@ function FormSectionLabel({
   );
 }
 
+const formLabelVariants = cva(
+  'font-medium text-foreground sm:whitespace-nowrap sm:flex-shrink-0',
+  {
+    variants: {
+      size: {
+        md: '',
+        sm: 'text-xs font-normal',
+      },
+    },
+    defaultVariants: {
+      size: 'md',
+    },
+  },
+);
+
 function FormLabel({
   required,
   className,
   children,
+  size,
   ...props
-}: React.ComponentProps<typeof LabelPrimitive.Root> & { required?: boolean }) {
+}: React.ComponentProps<typeof LabelPrimitive.Root> & {
+  required?: boolean;
+} & VariantProps<typeof formLabelVariants>) {
   const { formItemId } = useFormField();
 
   return (
     <Label
       data-slot="form-label"
-      className={cn('font-medium text-foreground', className)}
+      className={cn(formLabelVariants({ size }), className)}
       htmlFor={formItemId}
       {...props}
     >

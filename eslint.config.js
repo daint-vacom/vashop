@@ -25,13 +25,9 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      // Let eslint-plugin-unused-imports handle removing unused imports (fixer)
-      // Keep no-unused-vars but turn off unused checks to avoid duplicate warnings
-      'no-unused-vars': [
-        'warn',
-        { vars: 'all', args: 'after-used', ignoreRestSiblings: true },
-      ],
-      'unused-imports/no-unused-imports': 'error',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      'unused-imports/no-unused-imports': 'warn',
       'unused-imports/no-unused-vars': [
         'warn',
         {

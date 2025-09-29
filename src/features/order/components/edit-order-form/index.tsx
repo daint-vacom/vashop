@@ -1,5 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
+import { Form } from '@/components/ui/form.tsx';
+import { OrderDetailProvider } from '../../providers/order-detail-provider.tsx';
 import {
   editOrderSchema,
   EditOrderSchemaType,
@@ -7,19 +9,33 @@ import {
 import { OrderDetailDocumentCommonInfo } from './document-common-info';
 import { OrderDetailDocumentDetail } from './document-detail';
 import { OrderDetailGeneralInfo } from './general-info';
+import { OrderDetailSummary } from './summary';
 
 export function OrderDetailForm() {
   const form = useForm<EditOrderSchemaType>({
-    resolver: zodResolver(editOrderSchema),
+    // zodResolver generic compatibility can be tricky with some date transforms.
+    // Cast to Resolver with the target schema type to satisfy typings.
+    resolver: zodResolver(
+      editOrderSchema,
+    ) as unknown as Resolver<EditOrderSchemaType>,
   });
 
   return (
-    <div className="page-content">
-      <div className="page-content-spacing flex flex-row">
-        <OrderDetailGeneralInfo form={form} />
-        <OrderDetailDocumentCommonInfo form={form} />
-      </div>
-      <OrderDetailDocumentDetail />
-    </div>
+    <OrderDetailProvider form={form}>
+      <Form {...form}>
+        <form role="form">
+          <div className="page-content">
+            <div className="page-content-spacing flex flex-row">
+              <OrderDetailGeneralInfo />
+              <OrderDetailDocumentCommonInfo />
+            </div>
+            <OrderDetailDocumentDetail />
+            <div className="flex justify-end">
+              <OrderDetailSummary />
+            </div>
+          </div>
+        </form>
+      </Form>
+    </OrderDetailProvider>
   );
 }

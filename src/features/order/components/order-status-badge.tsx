@@ -1,4 +1,4 @@
-import { Badge, BadgeDot } from '@/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 import {
   ORDER_STATUS,
   ORDER_STATUS_LABELS,
@@ -27,7 +27,7 @@ export function OrderStatusBadge({ status }: Props) {
 
   return (
     <Badge variant={variant()} appearance="outline" size="lg" shape="circle">
-      <BadgeDot /> {ORDER_STATUS_LABELS[status]}
+      {ORDER_STATUS_LABELS[status]}
     </Badge>
   );
 }

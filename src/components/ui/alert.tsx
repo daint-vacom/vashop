@@ -16,6 +16,7 @@ const alertVariants = cva(
         info: '',
         mono: '',
         warning: '',
+        blue: '',
       },
       icon: {
         primary: '',
@@ -23,6 +24,7 @@ const alertVariants = cva(
         success: '',
         info: '',
         warning: '',
+        blue: '',
       },
       appearance: {
         solid: '',
@@ -77,7 +79,12 @@ const alertVariants = cva(
         className:
           'bg-zinc-950 text-white dark:bg-zinc-300 dark:text-black *:data-slot-[alert=close]:text-white',
       },
-
+      {
+        variant: 'blue',
+        appearance: 'solid',
+        className:
+          'bg-[var(--color-blue,var(--color-blue-500))] text-[var(--color-blue-foreground,var(--color-white))]',
+      },
       /* Outline */
       {
         variant: 'secondary',
@@ -121,6 +128,12 @@ const alertVariants = cva(
         className:
           'border border-border bg-background text-foreground [&_[data-slot=alert-close]]:text-foreground',
       },
+      {
+        variant: 'blue',
+        appearance: 'outline',
+        className:
+          'border border-border bg-background text-[var(--color-blue,var(--color-blue-500))] [&_[data-slot=alert-close]]:text-foreground',
+      },
 
       /* Light */
       {
@@ -157,6 +170,12 @@ const alertVariants = cva(
         appearance: 'light',
         className:
           'bg-[var(--color-warning-soft,var(--color-yellow-50))] border border-[var(--color-warning-alpha,var(--color-yellow-100))] text-foreground [&_[data-slot=alert-icon]]:text-[var(--color-warning-foreground,var(--color-yellow-600))] dark:bg-[var(--color-warning-soft,var(--color-yellow-950))] dark:border-[var(--color-warning-alpha,var(--color-yellow-900))]',
+      },
+      {
+        variant: 'blue',
+        appearance: 'light',
+        className:
+          'bg-[var(--color-blue-soft,var(--color-blue-50))] border border-[var(--color-blue-alpha,var(--color-blue-100))] text-foreground [&_[data-slot=alert-icon]]:text-[var(--color-blue-foreground,var(--color-blue-600))] dark:bg-[var(--color-blue-soft,var(--color-blue-950))] dark:border-[var(--color-blue-alpha,var(--color-blue-900))]',
       },
 
       /* Mono */
