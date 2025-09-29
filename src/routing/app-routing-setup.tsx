@@ -1,8 +1,9 @@
 import { AuthRouting } from '@/features/auth/auth-routing';
-import { useAuth } from '@/features/auth/context/auth-context';
 import { RequireAuth } from '@/features/auth/require-auth';
 import { ErrorRouting } from '@/features/errors/error-routing';
 import { HomePage } from '@/features/home';
+import { OrderAddPage } from '@/features/order/pages/add';
+import { OrderDetailPage } from '@/features/order/pages/detail';
 import { OrderManagementPage } from '@/features/order/pages/management';
 import { MainLayout } from '@/layouts/main-layout/layout';
 import { Navigate, Route, Routes } from 'react-router-dom';
@@ -22,6 +23,11 @@ export function AppRoutingSetup() {
             path={ROUTE_PATHS.ORDER_MANAGEMENT}
             element={<OrderManagementPage />}
           />
+          <Route
+            path={ROUTE_PATHS.ORDER_DETAIL()}
+            element={<OrderDetailPage />}
+          />
+          <Route path={ROUTE_PATHS.ORDER_ADD} element={<OrderAddPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to={ROUTE_PATHS.ERROR_404} />} />

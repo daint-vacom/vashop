@@ -2,7 +2,7 @@ import { type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
-const containerVariants = cva('w-full mx-auto px-4 lg:px-15', {
+const containerVariants = cva('w-full mx-auto px-4 lg:px-10', {
   variants: {
     width: {
       fixed: 'max-w-[1320px]',

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { IOrder } from '@/features/order/models/order.model';
-import { ColumnDef, RowSelectionState } from '@tanstack/react-table';
+import { ColumnDef, RowSelectionState, Table } from '@tanstack/react-table';
 import {
   Columns3Cog,
   FileText,
@@ -41,11 +41,15 @@ function Toolbar({
 }: {
   searchQuery: string | undefined;
   setSearchQuery?: (value: string) => void;
-  table: any;
+  table: Table<IOrder>;
 }) {
   return (
     <CardToolbar>
-      <SearchInput searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <SearchInput
+        placeholder="Tìm đơn hàng..."
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      />
       <DataGridColumnVisibility
         table={table}
         trigger={

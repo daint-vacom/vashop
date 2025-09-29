@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
+import { formatCurrency } from '@/lib/currency';
 import { UseTableColumnProps } from '@/components/ui/tables/columns/table-column.config';
 import { DataGridColumnHeader } from '@/components/ui/tables/data-grid-column-header';
 
@@ -12,8 +13,7 @@ export function useCurrencyColumn<T>({
   getCurrency,
   id = 'currency',
   headerTitle = 'Currency',
-  renderCell = (row) =>
-    row?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }),
+  renderCell = (row) => formatCurrency(row),
 }: Props<T>): ColumnDef<T> {
   return useMemo<ColumnDef<T>>(
     () => ({

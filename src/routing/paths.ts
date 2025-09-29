@@ -2,8 +2,8 @@ export const ROUTE_PATHS = {
   HOME: '/',
 
   ORDER_MANAGEMENT: '/orders',
-  ORDER_DETAIL: (orderId: string = ':orderId') =>
-    `/${ROUTE_PATHS.ORDER_MANAGEMENT}/${orderId}`,
+  ORDER_DETAIL: (orderId: string = ':orderId') => `/orders/${orderId}`,
+  ORDER_ADD: `/orders/add`,
 
   AUTH: '/auth',
   ERROR: '/error',

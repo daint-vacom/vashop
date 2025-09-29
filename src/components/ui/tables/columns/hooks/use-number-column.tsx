@@ -13,6 +13,7 @@ export function useNumberColumn<T>({
   id = 'number',
   headerTitle = 'Number',
   renderCell = (row) => row?.toString(),
+  ...props
 }: Props<T>): ColumnDef<T> {
   return useMemo<ColumnDef<T>>(
     () => ({
@@ -25,6 +26,7 @@ export function useNumberColumn<T>({
       meta: {
         headerTitle,
       },
+      ...props,
     }),
     [],
   );

@@ -44,7 +44,6 @@ export function SearchInput({
     <div className="relative">
       <Search className="size-4 text-muted-foreground absolute start-3 top-1/2 -translate-y-1/2" />
       <Input
-        placeholder="Tìm phòng ban..."
         value={localInput}
         onChange={(val) => {
           const v = val ?? '';

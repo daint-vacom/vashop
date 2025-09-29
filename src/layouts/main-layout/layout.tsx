@@ -65,7 +65,7 @@ export function MainLayout() {
       <div className="wrapper flex grow flex-col">
         <Header />
 
-        <main className="grow pt-5" role="content">
+        <main className="grow pt-5 lg:pt-7.5" role="content">
           <Outlet />
         </main>
 

@@ -15,7 +15,7 @@
   }
 
   html {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   /* Ensure the page background covers the full viewport and scrolling area */
@@ -149,5 +149,13 @@
 
   .page-content {
     @apply grid gap-5 lg:gap-7.5;
+  }
+
+  .page-content-spacing {
+    @apply gap-5 lg:gap-7.5;
+  }
+
+  .form-spacing {
+    @apply gap-5;
   }
 }

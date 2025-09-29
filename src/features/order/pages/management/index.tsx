@@ -5,20 +5,22 @@ import {
   ToolbarActions,
   ToolbarHeading,
 } from '@/layouts/main-layout/components/toolbar';
+import { ROUTE_PATHS } from '@/routing/paths';
 import { PlusCircle } from 'lucide-react';
+import { useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { useServerTable } from '@/components/ui/tables/use-server-table';
 import { getOrderListApi } from '../../services/order.service';
 import { OrderTable } from './components/order-table';
 
 export function OrderManagementPage() {
-  // Use the shared server table hook which handles API fetching, pagination state and URL sync
+  const navigate = useNavigate();
+
   const {
     pagination: tablePagination,
     setPagination: setTablePagination,
     data,
     total,
-    isLoading,
     search,
     setSearch,
   } = useServerTable(getOrderListApi, {
@@ -27,13 +29,17 @@ export function OrderManagementPage() {
     syncWithUrl: true,
   });
 
+  const handleAddClick = () => {
+    navigate(ROUTE_PATHS.ORDER_ADD);
+  };
+
   return (
     <Fragment>
       <PageContainer>
         <Toolbar>
           <ToolbarHeading title="Quản Lý Đơn Hàng" />
           <ToolbarActions>
-            <Button variant="primary">
+            <Button variant="primary" onClick={handleAddClick}>
               <PlusCircle /> Tạo đơn
             </Button>
           </ToolbarActions>
