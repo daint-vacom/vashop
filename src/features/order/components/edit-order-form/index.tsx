@@ -18,6 +18,9 @@ export function OrderDetailForm() {
     resolver: zodResolver(
       editOrderSchema,
     ) as unknown as Resolver<EditOrderSchemaType>,
+    defaultValues: {
+      number: 0,
+    },
   });
 
   const handleSubmit = (data: EditOrderSchemaType) => {};

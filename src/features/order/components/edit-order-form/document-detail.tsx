@@ -234,7 +234,7 @@ export function OrderDetailDocumentDetail() {
           <CardToolbar>
             <FormField
               control={form.control}
-              name="test"
+              name="number"
               render={({ field }) => (
                 <FormItem orient="horizontal">
                   <FormLabel size="sm">CK chung:</FormLabel>
@@ -252,7 +252,7 @@ export function OrderDetailDocumentDetail() {
             />
             <FormField
               control={form.control}
-              name="test"
+              name="number"
               render={({ field }) => (
                 <FormItem orient="horizontal">
                   <FormLabel size="sm">Giảm trừ:</FormLabel>

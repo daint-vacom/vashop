@@ -5,6 +5,7 @@ import z from 'zod';
 export const editOrderSchema = z.object({
   test: stringSchema(),
   date: dateSchema(),
+  number: z.coerce.number(),
 });
 
 export type EditOrderSchemaType = z.infer<typeof editOrderSchema>;

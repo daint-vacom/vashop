@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { advancedSearch } from '@/lib/search';
 import {
   Command,
@@ -49,6 +49,16 @@ export function SuggestionInput<TData = unknown>({
     value ? String(value) : '',
   );
 
+  // Keep internal inputValue in sync when parent/form updates the value
+  // This ensures when other inputs write to the same form field the
+  // suggestion input immediately reflects the change.
+  useEffect(() => {
+    const next = value ? String(value) : '';
+    if (next !== inputValue) setInputValue(next);
+    // we intentionally ignore inputValue in deps to avoid loop; compare inside
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, options]);
+
   const filteredOptions = useMemo(() => {
     if (manualFilter) return options;
     return options.filter((option) =>
@@ -72,11 +82,12 @@ export function SuggestionInput<TData = unknown>({
 
   const onSelectItem = (selectedValue: string) => {
     setInputValue(selectedValue);
-    onChange?.(selectedValue);
+
     const option = options.find(
       (o) => (o.searchableValue || o.value) === selectedValue,
     );
     if (option) {
+      onChange?.(option.value);
       onSelectOption?.(option);
     }
     setOpen(false);
