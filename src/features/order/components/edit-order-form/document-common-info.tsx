@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/form';
 import { InputCalendar } from '@/components/ui/inputs/input-calendar';
 import { Input } from '@/components/ui/inputs/input.tsx';
-import { useOrderDetail } from '../../providers/order-detail-provider.tsx';
+import { useOrderDetail } from '../../providers/order-detail.provider.tsx';
 
 export function OrderDetailDocumentCommonInfo() {
   const { form } = useOrderDetail();

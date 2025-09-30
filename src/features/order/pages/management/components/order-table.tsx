@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { IOrder } from '@/features/order/models/order.model';
-import { useOrderTable } from '@/features/order/providers/order-table-provider';
+import { useOrderTable } from '@/features/order/providers/order-table.provider';
 import {
   TIME_RANGE_LABELS,
   TIME_RANGES,

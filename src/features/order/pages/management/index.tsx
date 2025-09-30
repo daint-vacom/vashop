@@ -10,7 +10,7 @@ import { ROUTE_PATHS } from '@/routing/paths';
 import { PlusCircle } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
-import { OrderTableProvider } from '../../providers/order-table-provider';
+import { OrderTableProvider } from '../../providers/order-table.provider';
 import { OrderTable } from './components/order-table';
 
 export function OrderManagementPage() {

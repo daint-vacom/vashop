@@ -11,7 +11,7 @@ import {
 import { Input } from '@/components/ui/inputs/input.tsx';
 import { SelectInput } from '@/components/ui/inputs/select-input.tsx';
 import { SuggestionInput } from '@/components/ui/inputs/suggestion-input.tsx';
-import { useOrderDetail } from '../../providers/order-detail-provider.tsx';
+import { useOrderDetail } from '../../providers/order-detail.provider.tsx';
 
 export function OrderDetailGeneralInfo() {
   const { form } = useOrderDetail();

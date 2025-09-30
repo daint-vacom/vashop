@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type Resolver } from 'react-hook-form';
 import { Form } from '@/components/ui/form.tsx';
-import { OrderDetailProvider } from '../../providers/order-detail-provider.tsx';
+import { OrderDetailProvider } from '../../providers/order-detail.provider.tsx';
 import {
   editOrderSchema,
   EditOrderSchemaType,

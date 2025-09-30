@@ -29,7 +29,7 @@ import { DataGrid } from '@/components/ui/tables/data-grid';
 import { DataGridTable } from '@/components/ui/tables/data-grid-table';
 import { useDefaultTable } from '@/components/ui/tables/use-table';
 import { IDocumentDetailItem } from '../../models/document-detail.model';
-import { useOrderDetail } from '../../providers/order-detail-provider';
+import { useOrderDetail } from '../../providers/order-detail.provider';
 
 export function OrderDetailDocumentDetail() {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
