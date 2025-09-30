@@ -15,6 +15,8 @@ interface UseServerTableOptions {
   defaultPageSize?: number;
   queryKeyBase: string;
   syncWithUrl?: boolean;
+  /** When true, reset to first page when search, extra params or pageSize change */
+  resetPageOnChange?: boolean;
   defaultSearch?: string;
 }
 
@@ -26,6 +28,7 @@ export function useServerTable<T, E = unknown>(
     defaultPageSize = 5,
     queryKeyBase,
     syncWithUrl = true,
+    resetPageOnChange = true,
     defaultSearch = '',
   } = options || {};
 
@@ -126,6 +129,26 @@ export function useServerTable<T, E = unknown>(
     return Object.assign({}, base, extra) as ApiRequestOption & E;
   }, [pagination.pageIndex, pagination.pageSize, search, extra]);
 
+  // Track initial mount so we don't reset page on first render when syncing from URL
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Reset to first page when search, extra or pageSize change (if enabled)
+  useEffect(() => {
+    if (!resetPageOnChange) return;
+    if (!isMounted) {
+      setIsMounted(true);
+      return;
+    }
+    // when pageSize changes, also reset to first page
+    setPaginationState((prev) => ({ ...prev, pageIndex: 0 }));
+    if (syncWithUrl) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('page', '1');
+      setSearchParams(params, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search, extra, pagination.pageSize, resetPageOnChange]);
+
   const queryKey = useMemo(() => {
     // safe stringify extra for key (fallback to String if circular)
     let extraKey = '';
@@ -162,17 +185,20 @@ export function useServerTable<T, E = unknown>(
   // keep `extra` reflected in URL search params when enabled
   useEffect(() => {
     if (!syncWithUrl) return;
-    const params = new URLSearchParams(searchParams.toString());
-    // remove previous extra keys
-    const skip = new Set(['page', 'pageSize', 'q']);
-    for (const key of Array.from(params.keys())) {
-      if (!skip.has(key)) params.delete(key);
+    // Build params from the authoritative local state (pagination & search)
+    const params = new URLSearchParams();
+    // set pagination values from state so we don't accidentally reintroduce
+    // a stale `page` value that was captured earlier
+    params.set('page', String(pagination.pageIndex + 1));
+    params.set('pageSize', String(pagination.pageSize));
+    // include quick search if present
+    if (search && search.length > 0) {
+      params.set('q', search);
     }
     // write current extra keys
     if (extra && typeof extra === 'object') {
       for (const [k, v] of Object.entries(extra as Record<string, unknown>)) {
         if (v === undefined || v === null) continue;
-        // serialize non-string values as JSON so we can restore them
         if (typeof v === 'string') {
           params.set(k, v as string);
         } else {
@@ -185,8 +211,14 @@ export function useServerTable<T, E = unknown>(
       }
     }
     setSearchParams(params, { replace: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [extra, syncWithUrl]);
+  }, [
+    extra,
+    syncWithUrl,
+    pagination.pageIndex,
+    pagination.pageSize,
+    search,
+    setSearchParams,
+  ]);
 
   return {
     pagination,

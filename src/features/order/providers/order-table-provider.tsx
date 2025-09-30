@@ -1,4 +1,10 @@
-import React, { createContext, useCallback, useContext, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { TimeParam, TimeRange } from '@/utilities/axios/params/time.param';
 import {
   ApiRequestOption,
@@ -40,18 +46,35 @@ function useLocalOrderTable(fetcher: Fetcher, options?: UseOrderTableOptions) {
     setExtra,
   } = useServerTable<IOrder, TimeParam>(fetcher, options);
 
+  // If useServerTable initialized `extra` from URL (syncWithUrl=true)
+  // it may contain a `time` param. Ensure the local `timeRange` state
+  // reflects that initial value so the UI select shows the URL state.
+  useEffect(() => {
+    try {
+      const extraTime = (extra as TimeParam | undefined)?.time;
+      if (timeRange === undefined && extraTime !== undefined) {
+        setTimeRangeState(extraTime);
+      }
+    } catch {
+      // ignore parsing errors
+    }
+  }, [extra, timeRange]);
+
   const setTimeRange = useCallback(
     (value?: TimeRange) => {
       setTimeRangeState(value);
       // merge time into extra params so useServerTable.apiOptions includes time
       if (typeof setExtra === 'function') {
-        const merged = Object.assign({}, (extra as TimeParam) ?? {}, {
-          time: value,
-        });
-        setExtra(merged as TimeParam);
+        // Use functional update to avoid overwriting other extra keys
+        setExtra(
+          (prev) =>
+            Object.assign({}, (prev as TimeParam) ?? {}, {
+              time: value,
+            }) as TimeParam,
+        );
       }
     },
-    [extra, setExtra],
+    [setExtra],
   );
 
   return {
@@ -93,9 +116,7 @@ export function OrderTableProvider({
 export function useOrderTable() {
   const ctx = useContext(OrderTableContext);
   if (!ctx) {
-    throw new Error(
-      'useOrderTableProps must be used within an OrderTableProvider',
-    );
+    throw new Error('useOrderTable must be used within an OrderTableProvider');
   }
   return ctx;
 }
