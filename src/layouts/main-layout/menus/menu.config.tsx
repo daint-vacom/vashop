@@ -58,12 +58,12 @@ export const MENU_SIDEBAR: MenuConfig = [
     icon: Database,
     children: [
       { title: 'Đối tác', path: ROUTE_PATHS.CATEGORIES.PARTNER },
-      { title: 'Nhóm đối tác' },
-      { title: 'Nhân viên' },
-      { title: 'Nhóm hàng' },
-      { title: 'Ngân hàng' },
-      { title: 'Phòng ban' },
-      { title: 'Kho Hàng' },
+      { title: 'Nhóm đối tác', path: ROUTE_PATHS.CATEGORIES.PARTNER_GROUP },
+      { title: 'Nhân viên', path: ROUTE_PATHS.CATEGORIES.EMPLOYEE },
+      { title: 'Nhóm hàng', path: ROUTE_PATHS.CATEGORIES.PRODUCT_GROUP },
+      { title: 'Ngân hàng', path: ROUTE_PATHS.CATEGORIES.BANK },
+      { title: 'Phòng ban', path: ROUTE_PATHS.CATEGORIES.DEPARTMENT },
+      { title: 'Kho Hàng', path: ROUTE_PATHS.CATEGORIES.WAREHOUSE },
     ],
   },
   {

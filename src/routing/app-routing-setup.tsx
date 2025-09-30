@@ -1,5 +1,6 @@
 import { AuthRouting } from '@/features/auth/auth-routing';
 import { RequireAuth } from '@/features/auth/require-auth';
+import { EmployeeManagementPage } from '@/features/category/employee/pages/management';
 import { PartnerManagementPage } from '@/features/category/partner/pages/management';
 import { ErrorRouting } from '@/features/errors/error-routing';
 import { HomePage } from '@/features/home';
@@ -33,6 +34,10 @@ export function AppRoutingSetup() {
           <Route
             path={ROUTE_PATHS.CATEGORIES.PARTNER}
             element={<PartnerManagementPage />}
+          />
+          <Route
+            path={ROUTE_PATHS.CATEGORIES.EMPLOYEE}
+            element={<EmployeeManagementPage />}
           />
         </Route>
 

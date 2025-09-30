@@ -14,5 +14,11 @@ export const ROUTE_PATHS = {
   CATEGORIES: {
     INDEX: '/categories',
     PARTNER: '/categories/partners',
+    PARTNER_GROUP: '/categories/partner-groups',
+    EMPLOYEE: '/categories/employees',
+    PRODUCT_GROUP: '/categories/product-groups',
+    BANK: '/categories/banks',
+    DEPARTMENT: '/categories/departments',
+    WAREHOUSE: '/categories/warehouses',
   },
 } as const;
