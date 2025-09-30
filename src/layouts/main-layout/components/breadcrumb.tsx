@@ -21,7 +21,7 @@ const breadcrumbRoutes: BreadcrumbRoute[] = [
   { path: ROUTE_PATHS.ORDER_MANAGEMENT, name: 'Quản lý đơn hàng' },
   { path: ROUTE_PATHS.ORDER_DETAIL(), name: 'Chi tiết đơn hàng' },
 
-  { path: ROUTE_PATHS.CATEGORIES.INDEX, name: 'Danh mục' },
+  { path: ROUTE_PATHS.CATEGORIES.INDEX, name: 'Danh mục', clickable: false },
   { path: ROUTE_PATHS.CATEGORIES.PARTNER, name: 'Quản lý đối tác' },
   { path: ROUTE_PATHS.CATEGORIES.PARTNER_GROUP, name: 'Quản lý nhóm đối tác' },
   { path: ROUTE_PATHS.CATEGORIES.EMPLOYEE, name: 'Quản lý nhân viên' },
