@@ -20,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/ui/inputs/input';
 import { PasswordInput } from '@/components/ui/inputs/password-input';
 
 export function SignInPage() {

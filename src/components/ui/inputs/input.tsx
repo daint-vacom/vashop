@@ -23,7 +23,7 @@ const inputVariants = cva(
       },
       width: {
         full: '',
-        sm: 'w-20',
+        sm: 'w-input-sm',
       },
     },
     defaultVariants: {
@@ -252,5 +252,3 @@ export {
   inputVariants,
   inputAddonVariants,
 };
-
-export type { InputProps };

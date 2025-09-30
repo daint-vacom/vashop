@@ -2,19 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import { Search, X } from 'lucide-react';
 import { debounce } from '@/lib/helpers';
 import { Button } from '../button';
-import { Input, InputProps } from '../input';
+import { Input, InputProps } from './input';
 
 interface Props extends InputProps {
   searchQuery: string | undefined;
   setSearchQuery?: (value: string) => void;
 }
 
-export function SearchInput({
-  children,
-  searchQuery,
-  setSearchQuery,
-  ...props
-}: Props) {
+export function SearchInput({ searchQuery, setSearchQuery, ...props }: Props) {
   const debouncedRef = useRef<
     (((v: string) => void) & { cancel?: () => void }) | null
   >(null);

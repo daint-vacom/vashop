@@ -6,8 +6,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { InputCalendar } from '@/components/ui/inputs/input-calendar';
+import { Input } from '@/components/ui/inputs/input.tsx';
 import { useOrderDetail } from '../../providers/order-detail-provider.tsx';
 
 export function OrderDetailDocumentCommonInfo() {

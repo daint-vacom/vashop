@@ -45,6 +45,16 @@ function Toolbar({
 }) {
   return (
     <CardToolbar>
+      {/* <SelectInput
+        value={timeRange}
+        onChange={setTimeRange}
+        options={Object.values(TIME_RANGES).map((val) => ({
+          value: val,
+          label: TIME_RANGE_LABELS[val],
+        }))}
+        className="w-input-md"
+        enableSearch={false}
+      /> */}
       <SearchInput
         placeholder="Tìm đơn hàng..."
         searchQuery={searchQuery}

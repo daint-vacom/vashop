@@ -6,10 +6,12 @@ import {
   ToolbarHeading,
 } from '@/layouts/main-layout/components/toolbar';
 import { ROUTE_PATHS } from '@/routing/paths';
+import { TimeParam } from '@/utilities/axios/params/time.param';
 import { PlusCircle } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { useServerTable } from '@/components/ui/tables/use-server-table';
+import { IOrder } from '../../models/order.model';
 import { getOrderListApi } from '../../services/order.service';
 import { OrderTable } from './components/order-table';
 
@@ -23,7 +25,7 @@ export function OrderManagementPage() {
     total,
     search,
     setSearch,
-  } = useServerTable(getOrderListApi, {
+  } = useServerTable<IOrder, TimeParam>(getOrderListApi, {
     defaultPageSize: 5,
     queryKeyBase: 'orders',
     syncWithUrl: true,

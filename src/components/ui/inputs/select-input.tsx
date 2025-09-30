@@ -36,9 +36,10 @@ interface SelectSearchProps {
   emptyMessage?: string;
   disabled?: boolean;
   modal?: boolean;
+  enableSearch?: boolean;
 }
 
-export function SelectSearch({
+export function SelectInput({
   options,
   buildItem = (option) => option.label,
   value,
@@ -47,7 +48,9 @@ export function SelectSearch({
   searchPlaceholder = 'Search...',
   emptyMessage = 'No options found.',
   disabled = false,
+  className,
   modal,
+  enableSearch = true,
 }: SelectSearchProps) {
   const [open, setOpen] = useState(false);
 
@@ -59,7 +62,10 @@ export function SelectSearch({
         <Button
           variant="outline"
           role="combobox"
-          className="justify-between text-foreground data-placeholder:text-muted-foreground font-normal"
+          className={cn(
+            'justify-between text-foreground data-placeholder:text-muted-foreground font-normal',
+            className,
+          )}
           disabled={disabled}
         >
           <div
@@ -79,7 +85,9 @@ export function SelectSearch({
         <Command
           filter={(value, search) => (advancedSearch(value, search) ? 1 : 0)}
         >
-          <CommandInput placeholder={searchPlaceholder} className="h-9" />
+          {enableSearch && (
+            <CommandInput placeholder={searchPlaceholder} className="h-9" />
+          )}
           <CommandList>
             <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup>

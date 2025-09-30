@@ -1,0 +1,4 @@
+@theme inline {
+  --container-input-sm: calc(var(--spacing) * 20);
+  --container-input-md: calc(var(--spacing) * 40);
+}

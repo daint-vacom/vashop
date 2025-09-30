@@ -4,7 +4,7 @@ import { CalendarDays } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { Input, InputGroup } from '@/components/ui/input';
+import { Input, InputGroup } from '@/components/ui/inputs/input';
 import {
   Popover,
   PopoverContent,

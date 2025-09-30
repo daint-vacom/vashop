@@ -8,9 +8,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/ui/inputs/input.tsx';
+import { SelectInput } from '@/components/ui/inputs/select-input.tsx';
 import { SuggestionInput } from '@/components/ui/inputs/suggestion-input.tsx';
-import { SelectSearch } from '@/components/ui/select-search';
 import { useOrderDetail } from '../../providers/order-detail-provider.tsx';
 
 export function OrderDetailGeneralInfo() {
@@ -99,7 +99,7 @@ export function OrderDetailGeneralInfo() {
             <FormItem>
               <FormLabel required>Kho</FormLabel>
               <FormControl>
-                <SelectSearch
+                <SelectInput
                   modal={true}
                   placeholder="Chọn kho"
                   searchPlaceholder="Tìm kho..."

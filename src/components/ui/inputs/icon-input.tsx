@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { Input, InputProps } from '../input';
+import { Input, InputProps } from './input';
 
 interface Props extends InputProps {
   heading?: React.ReactNode;

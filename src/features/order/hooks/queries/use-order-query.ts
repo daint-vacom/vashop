@@ -1,3 +1,4 @@
+import { TimeParam } from '@/utilities/axios/params/time.param';
 import {
   ApiRequestOption,
   ApiResponseWithPagination,
@@ -6,8 +7,14 @@ import { useQuery } from 'react-query';
 import { IOrder } from '../../models/order.model';
 import { getOrderListApi } from '../../services/order.service';
 
-export function useOrderListQuery(option?: ApiRequestOption) {
-  const key = ['orders', option?.start, option?.count, option?.quickSearch];
+export function useOrderListQuery(option?: ApiRequestOption & TimeParam) {
+  const key = [
+    'orders',
+    option?.start,
+    option?.count,
+    option?.quickSearch,
+    option?.time,
+  ];
 
   return useQuery<ApiResponseWithPagination<IOrder>>({
     queryKey: key,

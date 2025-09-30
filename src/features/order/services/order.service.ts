@@ -1,3 +1,4 @@
+import { TimeParam } from '@/utilities/axios/params/time.param';
 import { serverApiAxios } from '@/utilities/axios/server-api';
 import {
   ApiRequestOption,
@@ -7,7 +8,9 @@ import getOrderMapper from '../mappers/get-order.mapper';
 import { IOrder } from '../models/order.model';
 import { GetOrderSchemaType } from '../schemas/get-order.schema';
 
-export const getOrderListApi = async (options?: ApiRequestOption) => {
+export const getOrderListApi = async (
+  options?: ApiRequestOption & TimeParam,
+) => {
   const response = await serverApiAxios.post<
     ApiResponseWithPagination<GetOrderSchemaType>
   >('/api/app/order/pages', options);

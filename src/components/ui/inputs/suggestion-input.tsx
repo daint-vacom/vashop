@@ -9,7 +9,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { Input, type InputProps } from '@/components/ui/input';
+import { Input, type InputProps } from '@/components/ui/inputs/input';
 import {
   Popover,
   PopoverContent,
