@@ -4,7 +4,7 @@ import {
   ApiResponseWithPagination,
 } from '@/utilities/axios/types';
 import { useServerTable } from '@/components/ui/tables/use-server-table';
-import IBankAccount from '../models/bank.model';
+import IBankAccount from '../models/bank-account.model';
 import { getBankAccountListApi } from '../services/bank.service';
 
 type BankAccountTableContextValue = ReturnType<

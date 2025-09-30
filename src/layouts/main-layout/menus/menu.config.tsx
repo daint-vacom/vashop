@@ -61,7 +61,7 @@ export const MENU_SIDEBAR: MenuConfig = [
       { title: 'Nhóm đối tác', path: ROUTE_PATHS.CATEGORIES.PARTNER_GROUP },
       { title: 'Nhân viên', path: ROUTE_PATHS.CATEGORIES.EMPLOYEE },
       { title: 'Nhóm hàng', path: ROUTE_PATHS.CATEGORIES.PRODUCT_GROUP },
-      { title: 'Ngân hàng', path: ROUTE_PATHS.CATEGORIES.BANK },
+      { title: 'Tài khoản ngân hàng', path: ROUTE_PATHS.CATEGORIES.BANK },
       { title: 'Phòng ban', path: ROUTE_PATHS.CATEGORIES.DEPARTMENT },
       { title: 'Kho Hàng', path: ROUTE_PATHS.CATEGORIES.WAREHOUSE },
     ],

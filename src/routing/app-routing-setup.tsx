@@ -1,6 +1,6 @@
 import { AuthRouting } from '@/features/auth/auth-routing';
 import { RequireAuth } from '@/features/auth/require-auth';
-import { BankAccountManagementPage } from '@/features/category/bank/pages/management';
+import { BankAccountManagementPage } from '@/features/category/bank-account/pages/management';
 import { EmployeeManagementPage } from '@/features/category/employee/pages/management';
 import { PartnerManagementPage } from '@/features/category/partner/pages/management';
 import { ErrorRouting } from '@/features/errors/error-routing';

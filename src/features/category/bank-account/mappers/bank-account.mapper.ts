@@ -1,5 +1,5 @@
-import IBankAccount from '../models/bank.model';
-import { GetBankAccountSchemaType } from '../schemas/get-bank.schema';
+import IBankAccount from '../models/bank-account.model';
+import { GetBankAccountSchemaType } from '../schemas/get-bank-account.schema';
 
 /**
  * Map validated GetBankAccountSchemaType -> IBankAccount

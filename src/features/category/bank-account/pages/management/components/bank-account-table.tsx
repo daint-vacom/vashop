@@ -1,8 +1,8 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import IBankAccount from '@/features/category/bank/models/bank.model';
-import { useBankAccountTable } from '@/features/category/bank/providers/bank-table.provider';
+import IBankAccount from '@/features/category/bank-account/models/bank-account.model';
+import { useBankAccountTable } from '@/features/category/bank-account/providers/bank-account-table.provider';
 import { ColumnDef, RowSelectionState, Table } from '@tanstack/react-table';
 import { Columns3Cog, SquarePen, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';

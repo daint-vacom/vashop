@@ -26,7 +26,7 @@ const breadcrumbRoutes: BreadcrumbRoute[] = [
   { path: ROUTE_PATHS.CATEGORIES.PARTNER_GROUP, name: 'Quản lý nhóm đối tác' },
   { path: ROUTE_PATHS.CATEGORIES.EMPLOYEE, name: 'Quản lý nhân viên' },
   { path: ROUTE_PATHS.CATEGORIES.PRODUCT_GROUP, name: 'Quản lý nhóm hàng' },
-  { path: ROUTE_PATHS.CATEGORIES.BANK, name: 'Quản lý ngân hàng' },
+  { path: ROUTE_PATHS.CATEGORIES.BANK, name: 'Quản lý tài khoản ngân hàng' },
   { path: ROUTE_PATHS.CATEGORIES.DEPARTMENT, name: 'Quản lý phòng ban' },
   { path: ROUTE_PATHS.CATEGORIES.WAREHOUSE, name: 'Quản lý kho' },
 
