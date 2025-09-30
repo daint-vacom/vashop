@@ -2,6 +2,12 @@
 
 import { useMemo, useState } from 'react';
 import { IOrder } from '@/features/order/models/order.model';
+import { useOrderTable } from '@/features/order/providers/order-table-provider';
+import {
+  TIME_RANGE_LABELS,
+  TIME_RANGES,
+  TimeRange,
+} from '@/utilities/axios/params/time.param';
 import { ColumnDef, RowSelectionState, Table } from '@tanstack/react-table';
 import {
   Columns3Cog,
@@ -20,6 +26,7 @@ import {
   CardToolbar,
 } from '@/components/ui/card';
 import { SearchInput } from '@/components/ui/inputs/search-input';
+import { SelectInput } from '@/components/ui/inputs/select-input';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useCurrencyColumn } from '@/components/ui/tables/columns/hooks/use-currency-column';
 import { useDateColumn } from '@/components/ui/tables/columns/hooks/use-date-column';
@@ -30,7 +37,7 @@ import { DataGrid } from '@/components/ui/tables/data-grid';
 import { DataGridColumnVisibility } from '@/components/ui/tables/data-grid-column-visibility';
 import { DataGridPagination } from '@/components/ui/tables/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/tables/data-grid-table';
-import { ServerSideTableProps } from '@/components/ui/tables/types/server-side-table-prop';
+// Server-side prop type no longer used; OrderTable reads from context
 import { useDefaultTable } from '@/components/ui/tables/use-table';
 import { useOrderStatusColumn } from '../hooks/use-order-status-column';
 
@@ -38,23 +45,27 @@ function Toolbar({
   searchQuery,
   setSearchQuery,
   table,
+  timeRange,
+  setTimeRange,
 }: {
   searchQuery: string | undefined;
   setSearchQuery?: (value: string) => void;
   table: Table<IOrder>;
+  timeRange?: TimeRange;
+  setTimeRange?: (v?: TimeRange) => void;
 }) {
   return (
     <CardToolbar>
-      {/* <SelectInput
-        value={timeRange}
-        onChange={setTimeRange}
+      <SelectInput
+        value={timeRange ?? ''}
+        onChange={(v) => setTimeRange && setTimeRange(v as TimeRange)}
         options={Object.values(TIME_RANGES).map((val) => ({
           value: val,
           label: TIME_RANGE_LABELS[val],
         }))}
         className="w-input-md"
         enableSearch={false}
-      /> */}
+      />
       <SearchInput
         placeholder="Tìm đơn hàng..."
         searchQuery={searchQuery}
@@ -73,15 +84,19 @@ function Toolbar({
   );
 }
 
-export function OrderTable({
-  data,
-  totalCount,
-  pagination,
-  onPaginationChange,
-  search: searchValue,
-  onSearchChange,
-}: ServerSideTableProps<IOrder>) {
+export function OrderTable() {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+
+  const {
+    data,
+    total,
+    pagination,
+    setPagination,
+    search,
+    setSearch,
+    timeRange,
+    setTimeRange,
+  } = useOrderTable();
 
   // Columns
   const orderNumberColumn = useStringColumn<IOrder>({
@@ -195,16 +210,16 @@ export function OrderTable({
     manualPagination: true,
     pageCount: Math.max(
       0,
-      Math.ceil((totalCount ?? 0) / (pagination?.pageSize ?? 1)),
+      Math.ceil((total ?? 0) / (pagination?.pageSize ?? 1)),
     ),
-    onPaginationChange: onPaginationChange,
+    onPaginationChange: setPagination,
     onRowSelectionChange: setRowSelection,
   });
 
   return (
     <DataGrid
       table={table}
-      recordCount={totalCount ?? 0}
+      recordCount={total ?? 0}
       tableLayout={{
         columnsPinnable: true,
         columnsResizable: true,
@@ -217,15 +232,16 @@ export function OrderTable({
           <CardHeading>
             <div className="flex flex-col">
               <span className="table-rows-count">
-                Số lượng đơn hàng:{' '}
-                <span className="font-medium">{totalCount}</span>
+                Số lượng đơn hàng: <span className="font-medium">{total}</span>
               </span>
             </div>
           </CardHeading>
           <Toolbar
-            searchQuery={searchValue}
-            setSearchQuery={onSearchChange}
+            searchQuery={search}
+            setSearchQuery={setSearch}
             table={table}
+            timeRange={timeRange}
+            setTimeRange={setTimeRange}
           />
         </CardHeader>
         <CardTable>

@@ -1,0 +1,101 @@
+import React, { createContext, useCallback, useContext, useState } from 'react';
+import { TimeParam, TimeRange } from '@/utilities/axios/params/time.param';
+import {
+  ApiRequestOption,
+  ApiResponseWithPagination,
+} from '@/utilities/axios/types';
+import { useServerTable } from '@/components/ui/tables/use-server-table';
+import { IOrder } from '../models/order.model';
+import { getOrderListApi } from '../services/order.service';
+
+type OrderTableContextValue = ReturnType<typeof useLocalOrderTable> | null;
+
+type Fetcher = (
+  opts?: ApiRequestOption & TimeParam,
+) => Promise<ApiResponseWithPagination<IOrder>>;
+type UseOrderTableOptions = Parameters<
+  typeof useServerTable<IOrder, TimeParam>
+>[1];
+
+function useLocalOrderTable(fetcher: Fetcher, options?: UseOrderTableOptions) {
+  // local time range state (maps to TimeParam.time)
+  const [timeRange, setTimeRangeState] = useState<TimeRange | undefined>(
+    undefined,
+  );
+
+  const {
+    pagination,
+    setPagination,
+    search,
+    setSearch,
+    apiOptions,
+    data,
+    total,
+    isLoading,
+    query,
+    // note: useServerTable exposes extra and setExtra; keep them available internally
+    // so we can merge time into the extra params, but DO NOT expose them in the
+    // returned object (per requirement).
+    extra,
+    setExtra,
+  } = useServerTable<IOrder, TimeParam>(fetcher, options);
+
+  const setTimeRange = useCallback(
+    (value?: TimeRange) => {
+      setTimeRangeState(value);
+      // merge time into extra params so useServerTable.apiOptions includes time
+      if (typeof setExtra === 'function') {
+        const merged = Object.assign({}, (extra as TimeParam) ?? {}, {
+          time: value,
+        });
+        setExtra(merged as TimeParam);
+      }
+    },
+    [extra, setExtra],
+  );
+
+  return {
+    pagination,
+    setPagination,
+    search,
+    setSearch,
+    apiOptions,
+    data,
+    total,
+    isLoading,
+    query,
+    timeRange,
+    setTimeRange,
+  } as const;
+}
+
+const OrderTableContext = createContext<OrderTableContextValue>(null);
+
+export function OrderTableProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Provider does not accept initial values; it computes them via a local hook
+  const value = useLocalOrderTable(getOrderListApi, {
+    defaultPageSize: 5,
+    queryKeyBase: 'orders',
+    syncWithUrl: true,
+  });
+
+  return (
+    <OrderTableContext.Provider value={value}>
+      {children}
+    </OrderTableContext.Provider>
+  );
+}
+
+export function useOrderTable() {
+  const ctx = useContext(OrderTableContext);
+  if (!ctx) {
+    throw new Error(
+      'useOrderTableProps must be used within an OrderTableProvider',
+    );
+  }
+  return ctx;
+}

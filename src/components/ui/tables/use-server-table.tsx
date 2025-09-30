@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ApiRequestOption,
   ApiResponseWithPagination,
@@ -55,7 +55,27 @@ export function useServerTable<T, E = unknown>(
   });
 
   // extra API params for specific APIs
-  const [extra, setExtraState] = useState<E | undefined>(undefined);
+  // If `syncWithUrl` is enabled, initialize `extra` from URL search params
+  // (excluding pagination and quick search) so callers that rely on
+  // extra params (like `time`) will reflect URL state on load.
+  const [extra, setExtraState] = useState<E | undefined>(() => {
+    if (!syncWithUrl) return undefined;
+    const skip = new Set(['page', 'pageSize', 'q']);
+    const entries = Array.from(searchParams.entries()).filter(
+      ([k]) => !skip.has(k),
+    );
+    if (entries.length === 0) return undefined;
+    const obj: Record<string, unknown> = {};
+    for (const [k, v] of entries) {
+      // try to parse JSON values (for complex params), fallback to string
+      try {
+        obj[k] = JSON.parse(v);
+      } catch {
+        obj[k] = v;
+      }
+    }
+    return obj as E;
+  });
 
   const setPagination = useCallback(
     (next: PaginationState | ((p: PaginationState) => PaginationState)) => {
@@ -138,6 +158,35 @@ export function useServerTable<T, E = unknown>(
 
   const data = query.data?.data ?? [];
   const total = query.data?.total ?? 0;
+
+  // keep `extra` reflected in URL search params when enabled
+  useEffect(() => {
+    if (!syncWithUrl) return;
+    const params = new URLSearchParams(searchParams.toString());
+    // remove previous extra keys
+    const skip = new Set(['page', 'pageSize', 'q']);
+    for (const key of Array.from(params.keys())) {
+      if (!skip.has(key)) params.delete(key);
+    }
+    // write current extra keys
+    if (extra && typeof extra === 'object') {
+      for (const [k, v] of Object.entries(extra as Record<string, unknown>)) {
+        if (v === undefined || v === null) continue;
+        // serialize non-string values as JSON so we can restore them
+        if (typeof v === 'string') {
+          params.set(k, v as string);
+        } else {
+          try {
+            params.set(k, JSON.stringify(v));
+          } catch {
+            params.set(k, String(v));
+          }
+        }
+      }
+    }
+    setSearchParams(params, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [extra, syncWithUrl]);
 
   return {
     pagination,
