@@ -1,5 +1,6 @@
 import { AuthRouting } from '@/features/auth/auth-routing';
 import { RequireAuth } from '@/features/auth/require-auth';
+import { PartnerManagementPage } from '@/features/category/partner/pages/management';
 import { ErrorRouting } from '@/features/errors/error-routing';
 import { HomePage } from '@/features/home';
 import { OrderAddPage } from '@/features/order/pages/add';
@@ -28,6 +29,11 @@ export function AppRoutingSetup() {
             element={<OrderDetailPage />}
           />
           <Route path={ROUTE_PATHS.ORDER_ADD} element={<OrderAddPage />} />
+
+          <Route
+            path={ROUTE_PATHS.CATEGORIES.PARTNER}
+            element={<PartnerManagementPage />}
+          />
         </Route>
 
         <Route path="*" element={<Navigate to={ROUTE_PATHS.ERROR_404} />} />

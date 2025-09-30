@@ -10,4 +10,9 @@ export const ROUTE_PATHS = {
   ERROR_404: '/error/404',
 
   CHANGE_PASSWORD: '/change-password',
+
+  CATEGORIES: {
+    INDEX: '/categories',
+    PARTNER: '/categories/partners',
+  },
 } as const;

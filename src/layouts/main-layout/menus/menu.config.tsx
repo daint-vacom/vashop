@@ -57,7 +57,7 @@ export const MENU_SIDEBAR: MenuConfig = [
     title: 'Danh mục',
     icon: Database,
     children: [
-      { title: 'Đối tác' },
+      { title: 'Đối tác', path: ROUTE_PATHS.CATEGORIES.PARTNER },
       { title: 'Nhóm đối tác' },
       { title: 'Nhân viên' },
       { title: 'Nhóm hàng' },
