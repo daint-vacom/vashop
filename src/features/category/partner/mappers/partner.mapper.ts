@@ -1,11 +1,11 @@
-import ICustomer from '../models/customer.model';
-import { GetCustomerSchemaType } from '../schemas/get-customer.schema';
+import IPartner from '../models/partner.model';
+import { GetPartnerSchemaType } from '../schemas/get-partner.schema';
 
 /**
  * Map validated GetCustomerSchemaType -> ICustomer
  * Normalizes undefined to null for nullable fields using `?? null`.
  */
-export function getCustomerMapper(payload: GetCustomerSchemaType): ICustomer {
+export function getCustomerMapper(payload: GetPartnerSchemaType): IPartner {
   return {
     id: payload.id,
     creationTime: payload.creationTime,

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const getCustomerSchema = z.object({
+export const getPartnerSchema = z.object({
   id: z.string(),
   creationTime: z.date(),
   creatorId: z.string(),
@@ -20,4 +20,4 @@ export const getCustomerSchema = z.object({
   isSupplier: z.boolean().nullable(),
 });
 
-export type GetCustomerSchemaType = z.infer<typeof getCustomerSchema>;
+export type GetPartnerSchemaType = z.infer<typeof getPartnerSchema>;

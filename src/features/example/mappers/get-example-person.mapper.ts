@@ -1,4 +1,4 @@
-import { IExamplePerson } from '../models/example-person.model';
+import IExamplePerson from '../models/example-person.model';
 import { GetExamplePersonSchemaType } from '../schemas/get-example-person.schema';
 
 /**
@@ -22,7 +22,7 @@ import { GetExamplePersonSchemaType } from '../schemas/get-example-person.schema
  * - If adding computed fields, add clear comments and consider moving the
  *   computation to a dedicated utility so tests can target it directly.
  */
-export function getExamplePersonMapper(
+function getExamplePersonMapper(
   schema: GetExamplePersonSchemaType,
 ): IExamplePerson {
   return {
@@ -34,3 +34,5 @@ export function getExamplePersonMapper(
     dateOfBirth: schema.dateOfBirth ?? null,
   };
 }
+
+export default getExamplePersonMapper;

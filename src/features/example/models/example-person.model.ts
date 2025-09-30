@@ -29,10 +29,12 @@
  *   dateOfBirth: Date | null,
  * }
  */
-export interface IExamplePerson {
+interface IExamplePerson {
   id: string;
   name: string;
   age: number;
   address: string | null;
   dateOfBirth: Date | null;
 }
+
+export default IExamplePerson;

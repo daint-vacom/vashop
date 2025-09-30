@@ -1,4 +1,4 @@
-export interface ICustomer {
+export interface IPartner {
   id: string;
   creationTime: Date;
   creatorId: string;
@@ -18,4 +18,4 @@ export interface ICustomer {
   isSupplier: boolean | null;
 }
 
-export default ICustomer;
+export default IPartner;
