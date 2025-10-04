@@ -78,11 +78,14 @@ export function EditBankAccountDialog({
                           emptyMessage="Không tìm thấy"
                           aria-label="Chọn ngân hàng"
                           options={bankList?.map((bank) => ({
+                            value: bank.name,
                             label: bank.name,
-                            value: bank.code,
+                            data: bank,
+                            searchableValue: `${bank.name} ${bank.code}`,
                           }))}
                           value={field.value?.toString() || ''}
                           onChange={field.onChange}
+                          renderOption={(option) => `${option.label}`}
                         />
                       </FormControl>
                       <FormMessage />

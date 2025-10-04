@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { advancedSearch } from '@/lib/search';
 import { cn } from '@/lib/utils';
@@ -19,15 +19,16 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-interface Option {
+interface Option<T = unknown> {
   value: string;
   label: string;
-  data?: any;
+  searchableValue?: string;
+  data?: T;
 }
 
-interface SelectSearchProps {
-  options?: Array<Option>;
-  buildItem?: (option: Option) => ReactNode;
+interface SelectSearchProps<T = unknown> {
+  options?: Array<Option<T>>;
+  renderOption?: (option: Option<T>) => ReactNode;
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -37,11 +38,13 @@ interface SelectSearchProps {
   disabled?: boolean;
   modal?: boolean;
   enableSearch?: boolean;
+  manualFilter?: boolean;
+  onSelectOption?: (option: Option<T>) => void;
 }
 
-export function SelectInput({
-  options,
-  buildItem = (option) => option.label,
+export function SelectInput<T>({
+  options = [],
+  renderOption = (option: Option<T>) => option.label,
   value,
   onChange,
   placeholder,
@@ -51,10 +54,20 @@ export function SelectInput({
   className,
   modal,
   enableSearch = true,
-}: SelectSearchProps) {
+  manualFilter = false,
+  onSelectOption,
+}: SelectSearchProps<T>) {
   const [open, setOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
 
   const hasValue = options?.find((option) => option.value === value);
+
+  const filteredOptions = useMemo(() => {
+    if (manualFilter) return options;
+    return options.filter((option) =>
+      advancedSearch(option.searchableValue || option.value, searchValue),
+    );
+  }, [manualFilter, options, searchValue]);
 
   return (
     <Popover open={open} onOpenChange={setOpen} modal={modal}>
@@ -82,21 +95,24 @@ export function SelectInput({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-(--radix-popover-trigger-width) p-0">
-        <Command
-          filter={(value, search) => (advancedSearch(value, search) ? 1 : 0)}
-        >
+        <Command shouldFilter={false}>
           {enableSearch && (
-            <CommandInput placeholder={searchPlaceholder} className="h-9" />
+            <CommandInput
+              className=""
+              value={searchValue}
+              onValueChange={setSearchValue}
+            />
           )}
           <CommandList>
             <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup>
-              {options?.map((option) => (
+              {filteredOptions?.map((option) => (
                 <CommandItem
                   key={option.value}
-                  value={option.label}
+                  value={option.searchableValue || option.label || option.value}
                   onSelect={() => {
                     onChange(option.value === value ? '' : option.value);
+                    onSelectOption?.(option);
                     setOpen(false);
                   }}
                 >
@@ -106,7 +122,7 @@ export function SelectInput({
                       value === option.value ? 'opacity-100' : 'opacity-0',
                     )}
                   />
-                  {buildItem(option)}
+                  {renderOption(option)}
                 </CommandItem>
               ))}
             </CommandGroup>
