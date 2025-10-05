@@ -3,7 +3,7 @@ import {
   ApiRequestOption,
   ApiResponseWithPagination,
 } from '@/utilities/axios/types';
-import { useServerTable } from '@/components/ui/tables/use-server-table';
+import { useApiPagination } from '@/hooks/queries/use-api-pagination';
 import IPartner from '../models/partner.model';
 import { getParnerListApi } from '../services/partner.service';
 
@@ -14,7 +14,7 @@ type Fetcher = (
 ) => Promise<ApiResponseWithPagination<IPartner>>;
 
 type UsePartnerTableOptions = Parameters<
-  typeof useServerTable<IPartner, unknown>
+  typeof useApiPagination<IPartner, unknown>
 >[1];
 
 function useLocalPartnerTable(
@@ -31,7 +31,7 @@ function useLocalPartnerTable(
     total,
     isLoading,
     query,
-  } = useServerTable<IPartner, unknown>(fetcher, options);
+  } = useApiPagination<IPartner, unknown>(fetcher, options);
 
   return {
     pagination,

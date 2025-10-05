@@ -3,7 +3,7 @@ import {
   ApiRequestOption,
   ApiResponseWithPagination,
 } from '@/utilities/axios/types';
-import { useServerTable } from '@/components/ui/tables/use-server-table';
+import { useApiPagination } from '@/hooks/queries/use-api-pagination';
 import IEmployee from '../models/employee.model';
 import { getEmployeeListApi } from '../services/employee.service';
 
@@ -16,7 +16,7 @@ type Fetcher = (
 ) => Promise<ApiResponseWithPagination<IEmployee>>;
 
 type UseEmployeeTableOptions = Parameters<
-  typeof useServerTable<IEmployee, unknown>
+  typeof useApiPagination<IEmployee, unknown>
 >[1];
 
 function useLocalEmployeeTable(
@@ -33,7 +33,7 @@ function useLocalEmployeeTable(
     total,
     isLoading,
     query,
-  } = useServerTable<IEmployee, unknown>(fetcher, options);
+  } = useApiPagination<IEmployee, unknown>(fetcher, options);
 
   return {
     pagination,

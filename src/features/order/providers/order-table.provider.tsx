@@ -10,7 +10,7 @@ import {
   ApiRequestOption,
   ApiResponseWithPagination,
 } from '@/utilities/axios/types';
-import { useServerTable } from '@/components/ui/tables/use-server-table';
+import { useApiPagination } from '@/hooks/queries/use-api-pagination';
 import { IOrder } from '../models/order.model';
 import { getOrderListApi } from '../services/order.service';
 
@@ -20,7 +20,7 @@ type Fetcher = (
   opts?: ApiRequestOption & TimeParam,
 ) => Promise<ApiResponseWithPagination<IOrder>>;
 type UseOrderTableOptions = Parameters<
-  typeof useServerTable<IOrder, TimeParam>
+  typeof useApiPagination<IOrder, TimeParam>
 >[1];
 
 function useLocalOrderTable(fetcher: Fetcher, options?: UseOrderTableOptions) {
@@ -44,7 +44,7 @@ function useLocalOrderTable(fetcher: Fetcher, options?: UseOrderTableOptions) {
     // returned object (per requirement).
     extra,
     setExtra,
-  } = useServerTable<IOrder, TimeParam>(fetcher, options);
+  } = useApiPagination<IOrder, TimeParam>(fetcher, options);
 
   // If useServerTable initialized `extra` from URL (syncWithUrl=true)
   // it may contain a `time` param. Ensure the local `timeRange` state

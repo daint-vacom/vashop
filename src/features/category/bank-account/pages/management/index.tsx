@@ -46,33 +46,33 @@ export function BankAccountManagementPage() {
   };
 
   return (
-    <Fragment>
-      <PageContainer>
-        <Toolbar>
-          <ToolbarHeading title="Quản Lý Tài Khoản Ngân Hàng" />
-          <ToolbarActions>
-            <Button variant="primary" onClick={handleAddOpen}>
-              <Landmark /> Thêm tài khoản
-            </Button>
-          </ToolbarActions>
-        </Toolbar>
-      </PageContainer>
-      <BankAccountTableProvider>
+    <BankAccountTableProvider>
+      <Fragment>
+        <PageContainer>
+          <Toolbar>
+            <ToolbarHeading title="Quản Lý Tài Khoản Ngân Hàng" />
+            <ToolbarActions>
+              <Button variant="primary" onClick={handleAddOpen}>
+                <Landmark /> Thêm tài khoản
+              </Button>
+            </ToolbarActions>
+          </Toolbar>
+        </PageContainer>
         <PageContainer>
           <div className="page-content">
             <BankAccountTable />
           </div>
         </PageContainer>
-      </BankAccountTableProvider>
 
-      <EditBankAccountDialog
-        form={form}
-        mode="add"
-        open={isAddOpen}
-        isProcessing={false}
-        onClose={handleAddClose}
-        onProcess={handleOnAdd}
-      />
-    </Fragment>
+        <EditBankAccountDialog
+          form={form}
+          mode="add"
+          open={isAddOpen}
+          isProcessing={false}
+          onClose={handleAddClose}
+          onProcess={handleOnAdd}
+        />
+      </Fragment>
+    </BankAccountTableProvider>
   );
 }

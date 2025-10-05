@@ -3,15 +3,19 @@ import {
   ApiRequestOption,
   ApiResponseWithPagination,
 } from '@/utilities/axios/types';
-import { PaginationState } from '@tanstack/react-table';
 import { useQuery } from 'react-query';
 import { useSearchParams } from 'react-router-dom';
+
+export interface ApiPaginationState {
+  pageIndex: number;
+  pageSize: number;
+}
 
 type Fetcher<T, E = unknown> = (
   opts?: ApiRequestOption & E,
 ) => Promise<ApiResponseWithPagination<T>>;
 
-interface UseServerTableOptions {
+interface UseApiFetchOptions {
   defaultPageSize?: number;
   queryKeyBase: string;
   syncWithUrl?: boolean;
@@ -20,9 +24,9 @@ interface UseServerTableOptions {
   defaultSearch?: string;
 }
 
-export function useServerTable<T, E = unknown>(
+export function useApiPagination<T, E = unknown>(
   fetcher: Fetcher<T, E>,
-  options?: UseServerTableOptions,
+  options?: UseApiFetchOptions,
 ) {
   const {
     defaultPageSize = 5,
@@ -34,7 +38,7 @@ export function useServerTable<T, E = unknown>(
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const initialPagination = useMemo<PaginationState>(() => {
+  const initialPagination = useMemo<ApiPaginationState>(() => {
     if (!syncWithUrl) {
       return { pageIndex: 0, pageSize: defaultPageSize };
     }
@@ -50,7 +54,7 @@ export function useServerTable<T, E = unknown>(
   }, []);
 
   const [pagination, setPaginationState] =
-    useState<PaginationState>(initialPagination);
+    useState<ApiPaginationState>(initialPagination);
 
   const [search, setSearchState] = useState<string | undefined>(() => {
     if (!syncWithUrl) return defaultSearch || undefined;
@@ -81,11 +85,15 @@ export function useServerTable<T, E = unknown>(
   });
 
   const setPagination = useCallback(
-    (next: PaginationState | ((p: PaginationState) => PaginationState)) => {
+    (
+      next:
+        | ApiPaginationState
+        | ((p: ApiPaginationState) => ApiPaginationState),
+    ) => {
       setPaginationState((prev) => {
         const newState =
           typeof next === 'function'
-            ? (next as (p: PaginationState) => PaginationState)(prev)
+            ? (next as (p: ApiPaginationState) => ApiPaginationState)(prev)
             : next;
         if (syncWithUrl) {
           const params = new URLSearchParams(searchParams.toString());
