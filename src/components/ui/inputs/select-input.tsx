@@ -30,7 +30,7 @@ interface SelectSearchProps<T = unknown> {
   options?: Array<Option<T>>;
   renderOption?: (option: Option<T>) => ReactNode;
   value: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   placeholder?: string;
   searchPlaceholder?: string;
   className?: string;
@@ -98,7 +98,8 @@ export function SelectInput<T>({
         <Command shouldFilter={false}>
           {enableSearch && (
             <CommandInput
-              className=""
+              placeholder={searchPlaceholder}
+              className="h-9"
               value={searchValue}
               onValueChange={setSearchValue}
             />
@@ -111,7 +112,7 @@ export function SelectInput<T>({
                   key={option.value}
                   value={option.searchableValue || option.label || option.value}
                   onSelect={() => {
-                    onChange(option.value === value ? '' : option.value);
+                    onChange?.(option.value === value ? '' : option.value);
                     onSelectOption?.(option);
                     setOpen(false);
                   }}

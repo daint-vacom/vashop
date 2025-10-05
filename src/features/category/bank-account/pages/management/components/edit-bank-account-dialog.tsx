@@ -19,6 +19,7 @@ import { SelectInput } from '@/components/ui/inputs/select-input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FormDialogProps } from '@/components/partials/dialogs/dialog-props';
 import { useBankListQuery } from '../../../hooks/use-bank-list-query';
+import IBank from '../../../models/bank.model';
 import { EditBankAccountSchemaType } from '../../../schemas/edit-bank-account.schema';
 
 interface Props extends FormDialogProps<EditBankAccountSchemaType> {
@@ -42,6 +43,11 @@ export function EditBankAccountDialog({
   const onError = (err: any) => {
     console.log('❌ Lỗi form:', err);
     console.log('form', form.getValues());
+  };
+
+  const handleOnBankChange = (bank: IBank) => {
+    form.setValue('name', bank.name);
+    form.setValue('bankCode', bank.code);
   };
 
   return (
@@ -84,7 +90,9 @@ export function EditBankAccountDialog({
                             searchableValue: `${bank.name} ${bank.code}`,
                           }))}
                           value={field.value?.toString() || ''}
-                          onChange={field.onChange}
+                          onSelectOption={(option) =>
+                            handleOnBankChange(option.data as IBank)
+                          }
                           renderOption={(option) => `${option.label}`}
                         />
                       </FormControl>

@@ -6,7 +6,7 @@ import {
   ToolbarHeading,
 } from '@/layouts/main-layout/components/toolbar';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { PlusCircle } from 'lucide-react';
+import { Landmark } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { BankAccountTableProvider } from '../../providers/bank-account-table.provider';
@@ -52,7 +52,7 @@ export function BankAccountManagementPage() {
           <ToolbarHeading title="Quản Lý Tài Khoản Ngân Hàng" />
           <ToolbarActions>
             <Button variant="primary" onClick={handleAddOpen}>
-              <PlusCircle /> Thêm tài khoản
+              <Landmark /> Thêm tài khoản
             </Button>
           </ToolbarActions>
         </Toolbar>
