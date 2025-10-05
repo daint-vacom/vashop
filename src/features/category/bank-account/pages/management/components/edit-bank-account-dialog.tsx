@@ -1,4 +1,4 @@
-import { LoaderCircleIcon } from 'lucide-react';
+import { LoaderCircleIcon, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -167,7 +167,9 @@ export function EditBankAccountDialog({
                 ) : mode === 'add' ? (
                   'Thêm'
                 ) : (
-                  'Cập nhật'
+                  <>
+                    <Save /> Cập nhật
+                  </>
                 )}
               </Button>
             </div>

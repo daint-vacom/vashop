@@ -2,9 +2,17 @@ import {
   ApiRequestOption,
   ApiResponseWithPagination,
 } from '@/utilities/axios/types';
+import { useMutation } from '@tanstack/react-query';
+import { showToast } from '@/lib/toast';
+import { UseMutationProps } from '@/lib/types/mutation';
 import { useApiPagination } from '@/hooks/queries/use-api-pagination';
 import IBankAccount from '../models/bank-account.model';
-import { getBankAccountListApi } from '../services/bank.service';
+import { EditBankAccountSchemaType } from '../schemas/edit-bank-account.schema';
+import {
+  addBankAccountApi,
+  editBankAccountApi,
+  getBankAccountListApi,
+} from '../services/bank.service';
 
 type UseBankAccountTableOptions = Parameters<
   typeof useApiPagination<IBankAccount, unknown>
@@ -47,4 +55,60 @@ export function useBankAccountListQuery({
     isLoading,
     query,
   } as const;
+}
+
+export function useAddBankAccountMutation({
+  onSuccess,
+  onError,
+}: UseMutationProps = {}) {
+  return useMutation<
+    Awaited<ReturnType<typeof addBankAccountApi>>,
+    Error,
+    EditBankAccountSchemaType
+  >({
+    mutationFn: addBankAccountApi,
+    onSuccess: () => {
+      showToast({
+        mode: 'success',
+        message: 'Thêm tài khoản ngân hàng thành công!',
+      });
+      onSuccess?.();
+    },
+    onError: (error) => {
+      console.error('Mutation Error:', error);
+      showToast({
+        mode: 'destructive',
+        message: 'Thêm tài khoản ngân hàng thất bại!',
+      });
+      onError?.(error);
+    },
+  });
+}
+
+export function useEditBankAccountMutation({
+  onSuccess,
+  onError,
+}: UseMutationProps = {}) {
+  return useMutation<
+    Awaited<ReturnType<typeof editBankAccountApi>>,
+    Error,
+    { id: string; payload: EditBankAccountSchemaType }
+  >({
+    mutationFn: ({ id, payload }) => editBankAccountApi(id, payload),
+    onSuccess: () => {
+      showToast({
+        mode: 'success',
+        message: 'Chỉnh sửa tài khoản ngân hàng thành công!',
+      });
+      onSuccess?.();
+    },
+    onError: (error) => {
+      console.error('Mutation Error:', error);
+      showToast({
+        mode: 'destructive',
+        message: 'Chỉnh sửa tài khoản ngân hàng thất bại!',
+      });
+      onError?.(error);
+    },
+  });
 }

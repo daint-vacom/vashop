@@ -10,11 +10,11 @@ const BankAccountTableContext =
 
 export function BankAccountTableProvider({
   children,
+  value,
 }: {
   children: React.ReactNode;
+  value: BankAccountTableContextValue;
 }) {
-  const value = useBankAccountListQuery();
-
   return (
     <BankAccountTableContext.Provider value={value}>
       {children}

@@ -53,7 +53,12 @@ function Toolbar({
   );
 }
 
-export function BankAccountTable() {
+interface BankAccountTableProps {
+  onEdit?: (bank: IBankAccount) => void;
+  onDelete?: (bank: IBankAccount) => void;
+}
+
+export function BankAccountTable({ onEdit, onDelete }: BankAccountTableProps) {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const { data, total, pagination, setPagination, search, setSearch } =
@@ -96,17 +101,24 @@ export function BankAccountTable() {
       {
         id: 'actions',
         header: '',
-        cell: () => (
+        cell: ({ row }) => (
           <div className="flex gap-0.5 justify-center">
             <Button
               mode="icon"
               variant="ghost"
               size="table-action"
               title="Xem/Chỉnh sửa"
+              onClick={() => onEdit?.(row.original)}
             >
               <SquarePen className="text-green-500" />
             </Button>
-            <Button mode="icon" variant="ghost" size="table-action" title="Xóa">
+            <Button
+              mode="icon"
+              variant="ghost"
+              size="table-action"
+              title="Xóa"
+              onClick={() => onDelete?.(row.original)}
+            >
               <Trash2 className="text-destructive" />
             </Button>
           </div>
@@ -115,7 +127,15 @@ export function BankAccountTable() {
         size: TableActionSize.buttons(2),
       },
     ],
-    [accNbrColumn, nameColumn, ownerColumn, branchColumn, bankCodeColumn],
+    [
+      accNbrColumn,
+      nameColumn,
+      ownerColumn,
+      branchColumn,
+      bankCodeColumn,
+      onEdit,
+      onDelete,
+    ],
   );
 
   const table = useDefaultTable({
