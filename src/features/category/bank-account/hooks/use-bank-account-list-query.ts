@@ -42,6 +42,7 @@ export function useBankAccountListQuery({
     total,
     isLoading,
     query,
+    refetch,
   } = useApiPagination<IBankAccount, unknown>(fetch, mergedOptions);
 
   return {
@@ -54,6 +55,7 @@ export function useBankAccountListQuery({
     total,
     isLoading,
     query,
+    refetch,
   } as const;
 }
 

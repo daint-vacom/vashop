@@ -59,13 +59,19 @@ export function BankAccountManagementPage() {
   const { mutate: addBankAccount, status: addStatus } =
     useAddBankAccountMutation({
       onSuccess: () => {
+        bankAccountList.refetch(1);
         handleEditClose();
+        setTimeout(() => {
+          // To avoid form reset before dialog close animation completed
+          form.reset(getFormDefaultValues());
+        }, 100);
       },
     });
 
   const { mutate: editBankAccount, status: editStatus } =
     useEditBankAccountMutation({
       onSuccess: () => {
+        bankAccountList.refetch();
         handleEditClose();
       },
     });

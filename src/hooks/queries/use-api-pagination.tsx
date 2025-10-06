@@ -228,6 +228,20 @@ export function useApiPagination<T, E = unknown>(
     setSearchParams,
   ]);
 
+  const refetch = useCallback(
+    (resetToPage?: number) => {
+      if (resetToPage !== undefined) {
+        // Treat the passed page number as 1-based (friendly API). Convert to
+        // zero-based pageIndex for internal state.
+        const pageIndex = Math.max(0, resetToPage - 1);
+        setPagination((prev) => ({ ...prev, pageIndex }));
+        return Promise.resolve();
+      }
+      return query.refetch();
+    },
+    [query, setPagination],
+  );
+
   return {
     pagination,
     setPagination,
@@ -241,5 +255,6 @@ export function useApiPagination<T, E = unknown>(
     // expose extra params and setter so callers can pass additional API options
     extra,
     setExtra: setExtraState,
+    refetch: refetch,
   } as const;
 }
