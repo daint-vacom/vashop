@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Funnel } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -13,16 +13,24 @@ import { useColumnHeader } from '../providers/column-header-provider';
 
 interface Props {
   options?: MultiOption[];
+  onChange?: (values: string[] | undefined) => void;
 }
 
-export function ColumnActionMultiSelect({ options }: Props) {
+export function ColumnActionMultiSelect({ options, onChange }: Props) {
   const { title, column } = useColumnHeader();
 
   const [open, setOpen] = useState(false);
 
   const selectedOptions = useMemo(() => {
     return column.getFilterValue() as string[];
-  }, [column.getFilterValue()]);
+  }, [column]);
+
+  const handleSelect = (values: string[] | undefined) => {
+    if (onChange) onChange(values);
+    else {
+      column.setFilterValue(values?.length ? values : undefined);
+    }
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -48,14 +56,12 @@ export function ColumnActionMultiSelect({ options }: Props) {
           </Button>
         </BadgeContainer>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0" align="end">
+      <PopoverContent className="w-column-action-menu p-0" align="end">
         <MultiSelect
           title={title}
           options={options ?? []}
           value={selectedOptions}
-          onChange={(values) =>
-            column.setFilterValue(values?.length ? values : undefined)
-          }
+          onChange={handleSelect}
         />
       </PopoverContent>
     </Popover>

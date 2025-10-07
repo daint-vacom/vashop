@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ApiRequestOption,
   ApiResponseWithPagination,
+  FilterCondition,
 } from '@/utilities/axios/types';
 import { useQuery } from 'react-query';
 import { useSearchParams } from 'react-router-dom';
@@ -61,13 +62,34 @@ export function useApiPagination<T, E = unknown>(
     return searchParams.get('q') ?? defaultSearch ?? undefined;
   });
 
+  // filters are represented as a record keyed by columnName for easier FE manipulation
+  const [filters, setFiltersState] = useState<Record<string, FilterCondition>>(
+    () => {
+      if (!syncWithUrl) return {};
+      const raw = searchParams.get('filterConditions');
+      if (!raw) return {};
+      try {
+        const arr: FilterCondition[] = JSON.parse(raw);
+        const rec: Record<string, FilterCondition> = {};
+        for (const item of arr) {
+          if (!item || !item.columnName) continue;
+          rec[item.columnName] = item;
+        }
+        return Object.keys(rec).length > 0 ? rec : {};
+      } catch {
+        return {};
+      }
+    },
+  );
+
   // extra API params for specific APIs
   // If `syncWithUrl` is enabled, initialize `extra` from URL search params
   // (excluding pagination and quick search) so callers that rely on
   // extra params (like `time`) will reflect URL state on load.
   const [extra, setExtraState] = useState<E | undefined>(() => {
     if (!syncWithUrl) return undefined;
-    const skip = new Set(['page', 'pageSize', 'q']);
+    // don't treat `filterConditions` as generic extra; it's handled by `filters`
+    const skip = new Set(['page', 'pageSize', 'q', 'filterConditions']);
     const entries = Array.from(searchParams.entries()).filter(
       ([k]) => !skip.has(k),
     );
@@ -134,8 +156,19 @@ export function useApiPagination<T, E = unknown>(
       quickSearch: search,
     };
     // merge extra params if provided
-    return Object.assign({}, base, extra) as ApiRequestOption & E;
-  }, [pagination.pageIndex, pagination.pageSize, search, extra]);
+    const merged = Object.assign({}, base, extra) as ApiRequestOption & E;
+    // convert filters record to array for `filterConditions` payload
+    if (filters && typeof filters === 'object') {
+      const arr: FilterCondition[] = Object.values(
+        filters as Record<string, FilterCondition>,
+      );
+      if (arr.length > 0) {
+        // attach to the payload using the expected key
+        (merged as ApiRequestOption).filterConditions = arr;
+      }
+    }
+    return merged;
+  }, [pagination.pageIndex, pagination.pageSize, search, extra, filters]);
 
   // Track initial mount so we don't reset page on first render when syncing from URL
   const [isMounted, setIsMounted] = useState(false);
@@ -165,12 +198,20 @@ export function useApiPagination<T, E = unknown>(
     } catch {
       extraKey = String(extra);
     }
+    // include serialized filters in key to ensure cache varies by filters
+    let filtersKey = '';
+    try {
+      filtersKey = filters ? JSON.stringify(filters) : '';
+    } catch {
+      filtersKey = String(filters);
+    }
     return [
       queryKeyBase,
       apiOptions.start ?? 0,
       apiOptions.count ?? 0,
       apiOptions.quickSearch ?? '',
       extraKey,
+      filtersKey,
     ];
   }, [
     queryKeyBase,
@@ -178,6 +219,7 @@ export function useApiPagination<T, E = unknown>(
     apiOptions.count,
     apiOptions.quickSearch,
     extra,
+    filters,
   ]);
 
   const query = useQuery<ApiResponseWithPagination<T>>({
@@ -218,6 +260,19 @@ export function useApiPagination<T, E = unknown>(
         }
       }
     }
+    // include filters as JSON array under `filterConditions` param
+    if (filters && typeof filters === 'object') {
+      try {
+        const arr: FilterCondition[] = Object.values(
+          filters as Record<string, FilterCondition>,
+        );
+        if (arr.length > 0) {
+          params.set('filterConditions', JSON.stringify(arr));
+        }
+      } catch {
+        // ignore serialization errors
+      }
+    }
     setSearchParams(params, { replace: true });
   }, [
     extra,
@@ -225,6 +280,7 @@ export function useApiPagination<T, E = unknown>(
     pagination.pageIndex,
     pagination.pageSize,
     search,
+    filters,
     setSearchParams,
   ]);
 
@@ -242,6 +298,55 @@ export function useApiPagination<T, E = unknown>(
     [query, setPagination],
   );
 
+  // set a single filter entry (field == columnName). Passing `undefined` removes it.
+  const setFilter = useCallback(
+    (field: string, value?: FilterCondition) => {
+      setFiltersState((prev) => {
+        const next = prev ? { ...prev } : {};
+        if (value === undefined || value === null) {
+          // remove the key
+          delete next[field];
+        } else {
+          next[field] = value;
+        }
+        return Object.keys(next).length > 0 ? next : {};
+      });
+      // If URL sync is enabled, update URL immediately to reflect single change
+      if (syncWithUrl) {
+        const params = new URLSearchParams(searchParams.toString());
+        // update the filters param based on the new local filters state
+        try {
+          const curRaw = params.get('filterConditions');
+          const curArr: FilterCondition[] = curRaw ? JSON.parse(curRaw) : [];
+          const map: Record<string, FilterCondition> = {};
+          for (const it of curArr) {
+            if (it && it.columnName) map[it.columnName] = it;
+          }
+          if (value === undefined || value === null) {
+            delete map[field];
+          } else {
+            map[field] = value;
+          }
+          const arr = Object.values(map);
+          if (arr.length > 0) {
+            params.set('filterConditions', JSON.stringify(arr));
+          } else {
+            params.delete('filterConditions');
+          }
+        } catch {
+          // fallback: remove param to avoid leaving malformed data
+          params.delete('filterConditions');
+        }
+        // reset to first page when changing filters
+        params.set('page', '1');
+        setSearchParams(params, { replace: true });
+        // also reset local pagination to first page
+        setPaginationState((prev) => ({ ...prev, pageIndex: 0 }));
+      }
+    },
+    [searchParams, setSearchParams, setPaginationState, syncWithUrl],
+  );
+
   return {
     pagination,
     setPagination,
@@ -255,6 +360,10 @@ export function useApiPagination<T, E = unknown>(
     // expose extra params and setter so callers can pass additional API options
     extra,
     setExtra: setExtraState,
+    // filters (user-facing record) and setter
+    filters,
+    setFilters: setFiltersState,
+    setFilter,
     refetch: refetch,
   } as const;
 }

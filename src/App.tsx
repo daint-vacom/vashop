@@ -1,7 +1,7 @@
 import { AppRouting } from '@/routing/app-routing';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { LoadingBarContainer } from 'react-top-loading-bar';
 import { Toaster } from '@/components/ui/sonner';
 import { AuthProvider } from './features/auth/providers/auth-provider';
@@ -27,7 +27,7 @@ export function App() {
                 <TooltipsProvider>
                   <QueryProvider>
                     <LoadingBarContainer>
-                      <HashRouter basename={BASE_URL}>
+                      <BrowserRouter basename={BASE_URL}>
                         <Toaster />
                         <BreadcrumbProvider>
                           <AppRouting />
@@ -35,7 +35,7 @@ export function App() {
                         {/* <NotiProvider>
 
                         </NotiProvider> */}
-                      </HashRouter>
+                      </BrowserRouter>
                     </LoadingBarContainer>
                   </QueryProvider>
                 </TooltipsProvider>

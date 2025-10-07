@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import {
   ApiRequestOption,
   ApiResponseWithPagination,
@@ -32,6 +33,7 @@ export function useBankAccountListQuery({
     syncWithUrl: true,
   };
   const mergedOptions = { ...defaultOptions, ...options };
+
   const {
     pagination,
     setPagination,
@@ -43,7 +45,26 @@ export function useBankAccountListQuery({
     isLoading,
     query,
     refetch,
+    filters,
+    setFilter,
   } = useApiPagination<IBankAccount, unknown>(fetch, mergedOptions);
+
+  const setBankFilter = useCallback(
+    (bankCode: string | undefined) => {
+      console.log('Setting bank filter:', bankCode);
+      if (!bankCode) {
+        setFilter('bankCode', undefined);
+      } else {
+        setFilter('bankCode', {
+          columnName: 'bankCode',
+          columnType: 'string',
+          operator: '=',
+          value: bankCode,
+        });
+      }
+    },
+    [setFilter],
+  );
 
   return {
     pagination,
@@ -56,6 +77,8 @@ export function useBankAccountListQuery({
     isLoading,
     query,
     refetch,
+    filters,
+    setBankFilter,
   } as const;
 }
 

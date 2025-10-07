@@ -45,9 +45,9 @@ export function EditBankAccountDialog({
     console.log('form', form.getValues());
   };
 
-  const handleOnBankChange = (bank: IBank) => {
-    form.setValue('name', bank.name);
-    form.setValue('bankCode', bank.code);
+  const handleOnBankChange = (bank: IBank | undefined) => {
+    form.setValue('name', bank?.name ?? '');
+    form.setValue('bankCode', bank?.code ?? '');
   };
 
   return (
@@ -91,7 +91,7 @@ export function EditBankAccountDialog({
                           }))}
                           value={field.value?.toString() || ''}
                           onSelectOption={(option) =>
-                            handleOnBankChange(option.data as IBank)
+                            handleOnBankChange(option?.data)
                           }
                           renderOption={(option) => `${option.label}`}
                         />

@@ -23,6 +23,7 @@ import { DataGridColumnVisibility } from '@/components/ui/tables/data-grid-colum
 import { DataGridPagination } from '@/components/ui/tables/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/tables/data-grid-table';
 import { useDefaultTable } from '@/components/ui/tables/use-table';
+import { useBankNameColumn } from '../../../hooks/table/use-bank-name-column';
 
 function Toolbar({
   searchQuery,
@@ -61,19 +62,30 @@ interface BankAccountTableProps {
 export function BankAccountTable({ onEdit, onDelete }: BankAccountTableProps) {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
-  const { data, total, pagination, setPagination, search, setSearch } =
-    useBankAccountTable();
+  const {
+    data,
+    total,
+    pagination,
+    setPagination,
+    search,
+    setSearch,
+    filters,
+    setBankFilter,
+  } = useBankAccountTable();
 
   // Columns
+  const nameColumn = useBankNameColumn<IBankAccount>({
+    getBank: (row) => ({
+      name: row.name,
+      code: row.bankCode,
+    }),
+    selectedValue: filters['bankCode']?.value,
+    onChange: (bank) => setBankFilter(bank?.code),
+  });
   const accNbrColumn = useStringColumn<IBankAccount>({
     getString: (row) => row.accNbr,
     id: 'accNbr',
     headerTitle: 'Số tài khoản',
-  });
-  const nameColumn = useStringColumn<IBankAccount>({
-    getString: (row) => row.name,
-    id: 'name',
-    headerTitle: 'Tên ngân hàng',
   });
   const ownerColumn = useStringColumn<IBankAccount>({
     getString: (row) => row.owner,
@@ -85,19 +97,14 @@ export function BankAccountTable({ onEdit, onDelete }: BankAccountTableProps) {
     id: 'branch',
     headerTitle: 'Chi nhánh',
   });
-  const bankCodeColumn = useStringColumn<IBankAccount>({
-    getString: (row) => row.bankCode,
-    id: 'bankCode',
-    headerTitle: 'Mã ngân hàng',
-  });
 
   const columns = useMemo<ColumnDef<IBankAccount>[]>(
     () => [
-      accNbrColumn,
       nameColumn,
+      accNbrColumn,
+
       ownerColumn,
       branchColumn,
-      bankCodeColumn,
       {
         id: 'actions',
         header: '',
@@ -127,15 +134,7 @@ export function BankAccountTable({ onEdit, onDelete }: BankAccountTableProps) {
         size: TableActionSize.buttons(2),
       },
     ],
-    [
-      accNbrColumn,
-      nameColumn,
-      ownerColumn,
-      branchColumn,
-      bankCodeColumn,
-      onEdit,
-      onDelete,
-    ],
+    [nameColumn, accNbrColumn, ownerColumn, branchColumn, onEdit, onDelete],
   );
 
   const table = useDefaultTable({
