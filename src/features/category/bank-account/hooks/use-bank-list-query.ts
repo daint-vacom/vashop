@@ -7,6 +7,5 @@ export function useBankListQuery() {
     queryKey: ['banks'],
     queryFn: getBankListApi,
     retry: 0,
-    refetchOnWindowFocus: false,
   });
 }

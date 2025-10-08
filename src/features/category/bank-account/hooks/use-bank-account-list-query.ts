@@ -51,7 +51,6 @@ export function useBankAccountListQuery({
 
   const setBankFilter = useCallback(
     (bankCode: string | undefined) => {
-      console.log('Setting bank filter:', bankCode);
       if (!bankCode) {
         setFilter('bankCode', undefined);
       } else {
