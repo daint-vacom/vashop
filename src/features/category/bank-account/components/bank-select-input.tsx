@@ -1,4 +1,6 @@
+import { getAvatarFallback } from '@/lib/avatar-fallback';
 import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { SelectInput } from '@/components/ui/inputs/select-input';
 import { AvatarCell } from '@/components/ui/tables/cells/person';
 import { useBankListQuery } from '../hooks/use-bank-list-query';
@@ -36,14 +38,18 @@ export function BankSelectInput({
       trigger={(option) => {
         const bank = option?.data;
         return (
-          <AvatarCell
-            imageUrl={''}
-            name={bank?.name ?? ''}
-            description={bank?.code ?? ''}
-          />
+          <>
+            <Avatar className="rounded-full size-6 shrink-0">
+              <AvatarImage src={''} />
+              <AvatarFallback>
+                {getAvatarFallback(bank?.name ?? '')}
+              </AvatarFallback>
+            </Avatar>
+            <span className="truncate">{bank?.name}</span>
+          </>
         );
       }}
-      className={cn('h-16', className)}
+      className={cn('', className)}
       {...props}
     />
   );

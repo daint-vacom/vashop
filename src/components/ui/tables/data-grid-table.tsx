@@ -152,6 +152,7 @@ function DataGridTableHeadRowCell<TData>({
       className={cn(
         'relative h-10 text-left rtl:text-right align-middle font-normal text-accent-foreground [&:has([role=checkbox])]:pe-0',
         headerCellSpacing,
+        props.tableLayout?.headerBorder && 'border-e',
         props.tableLayout?.cellBorder && 'border-e',
         props.tableLayout?.columnsResizable &&
           column.getCanResize() &&

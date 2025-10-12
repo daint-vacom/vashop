@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Landmark } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
+import { PageLoader } from '@/components/common/page-loader';
 import {
   useAddBankAccountMutation,
   useBankAccountListQuery,
@@ -101,6 +102,8 @@ export function BankAccountManagementPage() {
       addBankAccount(data);
     }
   };
+
+  if (bankAccountList.isLoading) return <PageLoader />;
 
   return (
     <BankAccountTableProvider value={bankAccountList}>

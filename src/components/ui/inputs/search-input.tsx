@@ -45,7 +45,7 @@ export function SearchInput({ searchQuery, setSearchQuery, ...props }: Props) {
           setLocalInput(v);
           debouncedRef.current?.(v);
         }}
-        className="ps-9 w-40"
+        className="ps-9 w-60"
         {...props}
       />
       {localInput && localInput.length > 0 && (

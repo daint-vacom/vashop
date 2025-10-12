@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { Table } from '@tanstack/react-table';
+import { Columns3Cog } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -7,17 +8,27 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Button } from '../button';
 
 function DataGridColumnVisibility<TData>({
   table,
   trigger,
 }: {
   table: Table<TData>;
-  trigger: ReactNode;
+  trigger?: ReactNode;
 }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
+        {trigger ? (
+          trigger
+        ) : (
+          <Button variant="outline">
+            <Columns3Cog />
+            Cột
+          </Button>
+        )}
+      </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[150px]">
         <DropdownMenuLabel className="font-medium">
           Hiển thị cột

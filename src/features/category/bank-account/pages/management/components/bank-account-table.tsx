@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import IBankAccount from '@/features/category/bank-account/models/bank-account.model';
 import { useBankAccountTable } from '@/features/category/bank-account/providers/bank-account-table.provider';
 import { ColumnDef, RowSelectionState, Table } from '@tanstack/react-table';
-import { Columns3Cog, SquarePen, Trash2 } from 'lucide-react';
+import { SquarePen, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -23,7 +23,6 @@ import { DataGridColumnVisibility } from '@/components/ui/tables/data-grid-colum
 import { DataGridPagination } from '@/components/ui/tables/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/tables/data-grid-table';
 import { useDefaultTable } from '@/components/ui/tables/use-table';
-import { useBankLogoColumn } from '../../../hooks/table/use-bank-logo-column';
 import { useBankNameColumn } from '../../../hooks/table/use-bank-name-column';
 
 function Toolbar({
@@ -38,19 +37,11 @@ function Toolbar({
   return (
     <CardToolbar>
       <SearchInput
-        placeholder="Tìm ngân hàng..."
+        placeholder="Tìm tài khoản..."
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
-      <DataGridColumnVisibility
-        table={table}
-        trigger={
-          <Button variant="outline">
-            <Columns3Cog />
-            Cột
-          </Button>
-        }
-      />
+      <DataGridColumnVisibility table={table} />
     </CardToolbar>
   );
 }
@@ -75,7 +66,6 @@ export function BankAccountTable({ onEdit, onDelete }: BankAccountTableProps) {
   } = useBankAccountTable();
 
   // Columns
-  const logoColumn = useBankLogoColumn<IBankAccount>((row) => row.bankCode);
   const nameColumn = useBankNameColumn<IBankAccount>({
     getBank: (row) => ({
       name: row.name,
@@ -102,7 +92,6 @@ export function BankAccountTable({ onEdit, onDelete }: BankAccountTableProps) {
 
   const columns = useMemo<ColumnDef<IBankAccount>[]>(
     () => [
-      logoColumn,
       nameColumn,
       accNbrColumn,
       ownerColumn,
@@ -136,15 +125,7 @@ export function BankAccountTable({ onEdit, onDelete }: BankAccountTableProps) {
         size: TableActionSize.buttons(2),
       },
     ],
-    [
-      logoColumn,
-      nameColumn,
-      accNbrColumn,
-      ownerColumn,
-      branchColumn,
-      onEdit,
-      onDelete,
-    ],
+    [nameColumn, accNbrColumn, ownerColumn, branchColumn, onEdit, onDelete],
   );
 
   const table = useDefaultTable({
@@ -175,7 +156,7 @@ export function BankAccountTable({ onEdit, onDelete }: BankAccountTableProps) {
         columnsPinnable: true,
         columnsResizable: true,
         columnsVisibility: true,
-        cellBorder: true,
+        headerBorder: true,
       }}
     >
       <Card>

@@ -31,12 +31,12 @@ export function SelectInput<T>({
   className,
   modal,
   onChange,
-  trigger = (option) => option?.label,
+  trigger = (option) => <span className="truncate">{option?.label}</span>,
   ...props
 }: SelectSearchProps<T>) {
   const [open, setOpen] = useState(false);
 
-  const hasValue = options?.find((option) => option.value === value);
+  const selectedValue = options?.find((option) => option.value === value);
 
   const handleChange = (val: string) => {
     onChange?.(val);
@@ -57,11 +57,11 @@ export function SelectInput<T>({
         >
           <div
             className={cn(
-              'flex-1 text-left min-w-0 justify-start truncate',
-              !hasValue && 'text-muted-foreground',
+              'flex-1 flex gap-x-2 min-w-0 justify-start items-center truncate',
+              !selectedValue && 'text-muted-foreground',
             )}
           >
-            {hasValue ? trigger(hasValue) : placeholder}
+            {selectedValue ? trigger(selectedValue) : placeholder}
           </div>
           <ChevronsUpDown className="opacity-50" />
         </Button>

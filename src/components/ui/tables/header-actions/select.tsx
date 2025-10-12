@@ -57,8 +57,7 @@ export function ColumnActionSelect<T>({
             title={`Lọc ${title}`}
             aria-label={`Lọc ${title}`}
           >
-            {/** show funnel in primary color when a filter is active */}
-            <Funnel className={cn(selectedOption ? 'text-primary' : '')} />
+            <Funnel className={cn(selectedOption ? 'text-blue-500' : '')} />
           </Button>
         </BadgeContainer>
       </PopoverTrigger>
