@@ -23,6 +23,8 @@ interface UseApiFetchOptions {
   /** When true, reset to first page when search, extra params or pageSize change */
   resetPageOnChange?: boolean;
   defaultSearch?: string;
+  /** When true, cache the total from first successful response and use it when total = 0 */
+  cachedTotal?: boolean;
 }
 
 export function useApiPagination<T, E = unknown>(
@@ -35,6 +37,7 @@ export function useApiPagination<T, E = unknown>(
     syncWithUrl = true,
     resetPageOnChange = true,
     defaultSearch = '',
+    cachedTotal = true,
   } = options || {};
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -105,6 +108,9 @@ export function useApiPagination<T, E = unknown>(
     }
     return obj as E;
   });
+
+  // Cache total when cachedTotal is enabled
+  const [cachedTotalValue, setCachedTotalValue] = useState<number>(0);
 
   const setPagination = useCallback(
     (
@@ -230,7 +236,35 @@ export function useApiPagination<T, E = unknown>(
   });
 
   const data = query.data?.data ?? [];
-  const total = query.data?.total ?? 0;
+  const responseTotal = query.data?.total ?? 0;
+
+  // Use cached total logic when enabled
+  const total = useMemo(() => {
+    if (!cachedTotal) {
+      return responseTotal;
+    }
+
+    // If response has valid total (> 0), cache it
+    if (responseTotal > 0) {
+      setCachedTotalValue(responseTotal);
+      return responseTotal;
+    }
+
+    // If response total is 0 and we have cached value, use cached
+    if (responseTotal === 0 && cachedTotalValue > 0) {
+      return cachedTotalValue;
+    }
+
+    // Fallback to response total
+    return responseTotal;
+  }, [responseTotal, cachedTotal, cachedTotalValue]);
+
+  // Reset cached total when search, filters, or extra params change
+  useEffect(() => {
+    if (cachedTotal) {
+      setCachedTotalValue(0);
+    }
+  }, [search, filters, extra, cachedTotal]);
 
   // keep `extra` reflected in URL search params when enabled
   useEffect(() => {
