@@ -13,6 +13,7 @@ export function useStringColumn<T>({
   id = 'string',
   headerTitle = 'String',
   renderCell = (row) => row?.toString(),
+  ...props
 }: Props<T>): ColumnDef<T> {
   return useMemo<ColumnDef<T>>(
     () => ({
@@ -25,7 +26,8 @@ export function useStringColumn<T>({
       meta: {
         headerTitle,
       },
+      ...props,
     }),
-    [],
+    [getString, headerTitle, id, props, renderCell],
   );
 }

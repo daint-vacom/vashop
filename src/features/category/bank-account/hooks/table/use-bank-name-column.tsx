@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { wrapEmptyCodeString } from '@/lib/codes/data_codes';
-import { LabelDescriptionCell } from '@/components/ui/tables/cells/label-description';
+import { AvatarCell } from '@/components/ui/tables/cells/person';
 import { UseTableColumnProps } from '@/components/ui/tables/columns/table-column.config';
 import { DataGridColumnHeader } from '@/components/ui/tables/data-grid-column-header';
 import { ColumnActionSelect } from '@/components/ui/tables/header-actions/select';
@@ -51,12 +51,17 @@ export function useBankNameColumn<T>({
         const code = getBank(row.original)?.code;
         return filterValue.includes(wrapEmptyCodeString(code));
       },
-      cell: ({ row }) => (
-        <LabelDescriptionCell
-          label={getBank(row.original)?.name}
-          description={getBank(row.original)?.code}
-        />
-      ),
+      cell: ({ row }) => {
+        const bank = getBank(row.original);
+
+        return (
+          <AvatarCell
+            imageUrl={''}
+            name={bank?.name ?? ''}
+            description={bank?.code ?? ''}
+          />
+        );
+      },
       meta: {
         headerTitle: headerTitle,
       },

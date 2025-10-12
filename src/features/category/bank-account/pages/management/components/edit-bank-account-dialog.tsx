@@ -1,4 +1,5 @@
 import { LoaderCircleIcon, Save } from 'lucide-react';
+import { ControllerRenderProps } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -42,8 +43,11 @@ export function EditBankAccountDialog({
     console.log('form', form.getValues());
   };
 
-  const handleOnBankChange = (bank: IBank | undefined) => {
-    form.setValue('name', bank?.name ?? '');
+  const handleOnBankChange = (
+    field: ControllerRenderProps<EditBankAccountSchemaType, 'name'>,
+    bank: IBank | undefined,
+  ) => {
+    field.onChange(bank?.name ?? '');
     form.setValue('bankCode', bank?.code ?? '');
   };
 
@@ -77,7 +81,7 @@ export function EditBankAccountDialog({
                         <BankSelectInput
                           value={field.value?.toString() || ''}
                           onSelectOption={(option) =>
-                            handleOnBankChange(option?.data)
+                            handleOnBankChange(field, option?.data)
                           }
                         />
                       </FormControl>
