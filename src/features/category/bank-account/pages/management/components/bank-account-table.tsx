@@ -183,7 +183,8 @@ export function BankAccountTable({ onEdit, onDelete }: BankAccountTableProps) {
           <CardHeading>
             <div className="flex flex-col">
               <span className="table-rows-count">
-                Số lượng ngân hàng: <span className="font-medium">{total}</span>
+                Tổng số lượng ngân hàng:{' '}
+                <span className="font-medium">{total}</span>
               </span>
             </div>
           </CardHeading>

@@ -15,10 +15,9 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/inputs/input';
-import { SelectInput } from '@/components/ui/inputs/select-input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FormDialogProps } from '@/components/partials/dialogs/dialog-props';
-import { useBankListQuery } from '../../../hooks/use-bank-list-query';
+import { BankSelectInput } from '../../../components/bank-select-input';
 import IBank from '../../../models/bank.model';
 import { EditBankAccountSchemaType } from '../../../schemas/edit-bank-account.schema';
 
@@ -34,8 +33,6 @@ export function EditBankAccountDialog({
   onClose,
   onProcess,
 }: Props) {
-  const { data: bankList } = useBankListQuery();
-
   async function onSubmit(values: EditBankAccountSchemaType) {
     onProcess(values);
   }
@@ -74,40 +71,15 @@ export function EditBankAccountDialog({
                   control={form.control}
                   name="name"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="col-span-full">
                       <FormLabel required>Ngân hàng</FormLabel>
                       <FormControl>
-                        <SelectInput
-                          modal={true}
-                          placeholder="Chọn ngân hàng"
-                          searchPlaceholder="Tìm ngân hàng..."
-                          emptyMessage="Không tìm thấy"
-                          aria-label="Chọn ngân hàng"
-                          options={bankList?.map((bank) => ({
-                            value: bank.name,
-                            label: bank.name,
-                            data: bank,
-                            searchableValue: `${bank.name} ${bank.code}`,
-                          }))}
+                        <BankSelectInput
                           value={field.value?.toString() || ''}
                           onSelectOption={(option) =>
                             handleOnBankChange(option?.data)
                           }
-                          renderOption={(option) => `${option.label}`}
                         />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="bankCode"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel required>Mã ngân hàng</FormLabel>
-                      <FormControl>
-                        <Input {...field} readOnly />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

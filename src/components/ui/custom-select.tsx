@@ -49,7 +49,10 @@ export function CustomSelect<T>({
   const filteredOptions = useMemo(() => {
     if (manualFilter) return options;
     return options.filter((option) =>
-      advancedSearch(option.searchableValue || option.value, searchValue),
+      advancedSearch(
+        option.searchableValue || option.label || option.value,
+        searchValue,
+      ),
     );
   }, [manualFilter, options, searchValue]);
 
@@ -75,6 +78,7 @@ export function CustomSelect<T>({
                 onChange?.(isSameValue ? '' : option.value);
                 onSelectOption?.(isSameValue ? undefined : option);
               }}
+              className="w-full"
             >
               <Check
                 className={cn(
@@ -82,7 +86,7 @@ export function CustomSelect<T>({
                   value === option.value ? 'opacity-100' : 'opacity-0',
                 )}
               />
-              {renderOption(option)}
+              <div className="flex-1 min-w-0">{renderOption(option)}</div>
             </CommandItem>
           ))}
         </CommandGroup>

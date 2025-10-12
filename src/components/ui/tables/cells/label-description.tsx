@@ -5,7 +5,7 @@ interface Props {
   description?: React.ReactNode;
 }
 
-export function LabelDescriptionTableCell({ label, description }: Props) {
+export function LabelDescriptionCell({ label, description }: Props) {
   return (
     <div className="flex flex-col gap-0.5">
       <div className="text-sm font-medium text-mono hover:text-primary mb-px truncate">

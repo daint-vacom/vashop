@@ -174,7 +174,8 @@ export function EmployeeTable() {
           <CardHeading>
             <div className="flex flex-col">
               <span className="table-rows-count">
-                Số lượng nhân viên: <span className="font-medium">{total}</span>
+                Tổng số lượng nhân viên:{' '}
+                <span className="font-medium">{total}</span>
               </span>
             </div>
           </CardHeading>

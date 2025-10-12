@@ -160,7 +160,8 @@ export function PartnerTable() {
           <CardHeading>
             <div className="flex flex-col">
               <span className="table-rows-count">
-                Số lượng đối tác: <span className="font-medium">{total}</span>
+                Tổng số lượng đối tác:{' '}
+                <span className="font-medium">{total}</span>
               </span>
             </div>
           </CardHeading>

@@ -106,7 +106,7 @@ export function OrderDetailGeneralInfo() {
                   emptyMessage="Không tìm thấy"
                   options={[
                     {
-                      label: 'A',
+                      label: 'A123 123 123 123 123 123 123',
                       value: 'a',
                     },
                     {

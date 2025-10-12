@@ -9,13 +9,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { CustomSelect, CustomSelectProps } from '../custom-select';
+import {
+  CustomSelect,
+  CustomSelectProps,
+  SelectOption,
+} from '../custom-select';
 
 interface SelectSearchProps<T = unknown> extends CustomSelectProps<T> {
   placeholder?: string;
   className?: string;
   disabled?: boolean;
   modal?: boolean;
+  trigger?: (option: SelectOption<T> | undefined) => React.ReactNode;
 }
 
 export function SelectInput<T>({
@@ -26,6 +31,7 @@ export function SelectInput<T>({
   className,
   modal,
   onChange,
+  trigger = (option) => option?.label,
   ...props
 }: SelectSearchProps<T>) {
   const [open, setOpen] = useState(false);
@@ -55,9 +61,7 @@ export function SelectInput<T>({
               !hasValue && 'text-muted-foreground',
             )}
           >
-            {hasValue
-              ? options?.find((option) => option.value === value)?.label
-              : placeholder}
+            {hasValue ? trigger(hasValue) : placeholder}
           </div>
           <ChevronsUpDown className="opacity-50" />
         </Button>

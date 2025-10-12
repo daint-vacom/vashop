@@ -232,7 +232,8 @@ export function OrderTable() {
           <CardHeading>
             <div className="flex flex-col">
               <span className="table-rows-count">
-                Số lượng đơn hàng: <span className="font-medium">{total}</span>
+                Tổng số lượng đơn hàng:{' '}
+                <span className="font-medium">{total}</span>
               </span>
             </div>
           </CardHeading>
