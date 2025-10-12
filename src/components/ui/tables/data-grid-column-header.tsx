@@ -1,4 +1,4 @@
-import { HTMLAttributes, ReactNode, useMemo, useState } from 'react';
+import { HTMLAttributes, ReactNode } from 'react';
 import { Column } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp, ChevronsUpDown, PinOff } from 'lucide-react';
 import { cn } from '@/lib/utils';

@@ -21,7 +21,7 @@ export type ApiRequestOption = {
   quickSearch?: string;
   filterConditions?: FilterCondition[];
   sort?: {
-    selector: 'creationTime';
+    selector: string;
     desc: boolean;
   };
 };

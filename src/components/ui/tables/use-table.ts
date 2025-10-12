@@ -66,7 +66,7 @@ export function useDefaultTable<TData extends RowData>({
       minSize: 50,
       enableResizing: true,
     },
-    enableSorting: false,
+    enableSorting: true,
     enableColumnResizing: true,
     enableRowSelection: !!onRowSelectionChange,
     enableGlobalFilter: !!onGlobalFilterChange,

@@ -47,6 +47,8 @@ export function useBankAccountListQuery({
     refetch,
     filters,
     setFilter,
+    sort,
+    setSort,
   } = useApiPagination<IBankAccount, unknown>(fetch, mergedOptions);
 
   const setBankFilter = useCallback(
@@ -78,6 +80,8 @@ export function useBankAccountListQuery({
     refetch,
     filters,
     setBankFilter,
+    sort,
+    setSort,
   } as const;
 }
 

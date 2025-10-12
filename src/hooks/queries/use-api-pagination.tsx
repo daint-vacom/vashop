@@ -85,6 +85,20 @@ export function useApiPagination<T, E = unknown>(
     },
   );
 
+  // sort state
+  const [sort, setSortState] = useState<
+    { selector: string; desc: boolean } | undefined
+  >(() => {
+    if (!syncWithUrl) return undefined;
+    const raw = searchParams.get('sort');
+    if (!raw) return undefined;
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return undefined;
+    }
+  });
+
   // extra API params for specific APIs
   // If `syncWithUrl` is enabled, initialize `extra` from URL search params
   // (excluding pagination and quick search) so callers that rely on
@@ -173,8 +187,11 @@ export function useApiPagination<T, E = unknown>(
         (merged as ApiRequestOption).filterConditions = arr;
       }
     }
+    if (sort) {
+      (merged as ApiRequestOption).sort = sort;
+    }
     return merged;
-  }, [pagination.pageIndex, pagination.pageSize, search, extra, filters]);
+  }, [pagination.pageIndex, pagination.pageSize, search, extra, filters, sort]);
 
   // Track initial mount so we don't reset page on first render when syncing from URL
   const [isMounted, setIsMounted] = useState(false);
@@ -211,6 +228,13 @@ export function useApiPagination<T, E = unknown>(
     } catch {
       filtersKey = String(filters);
     }
+    // include serialized sort in key
+    let sortKey = '';
+    try {
+      sortKey = sort ? JSON.stringify(sort) : '';
+    } catch {
+      sortKey = String(sort);
+    }
     return [
       queryKeyBase,
       apiOptions.start ?? 0,
@@ -218,6 +242,7 @@ export function useApiPagination<T, E = unknown>(
       apiOptions.quickSearch ?? '',
       extraKey,
       filtersKey,
+      sortKey,
     ];
   }, [
     queryKeyBase,
@@ -226,6 +251,7 @@ export function useApiPagination<T, E = unknown>(
     apiOptions.quickSearch,
     extra,
     filters,
+    sort,
   ]);
 
   const query = useQuery<ApiResponseWithPagination<T>>({
@@ -307,6 +333,14 @@ export function useApiPagination<T, E = unknown>(
         // ignore serialization errors
       }
     }
+    // include sort as JSON
+    if (sort) {
+      try {
+        params.set('sort', JSON.stringify(sort));
+      } catch {
+        // ignore serialization errors
+      }
+    }
     setSearchParams(params, { replace: true });
   }, [
     extra,
@@ -315,6 +349,7 @@ export function useApiPagination<T, E = unknown>(
     pagination.pageSize,
     search,
     filters,
+    sort,
     setSearchParams,
   ]);
 
@@ -381,6 +416,22 @@ export function useApiPagination<T, E = unknown>(
     [searchParams, setSearchParams, setPaginationState, syncWithUrl],
   );
 
+  const setSort = useCallback(
+    (value?: { selector: string; desc: boolean }) => {
+      setSortState(value);
+      if (syncWithUrl) {
+        const params = new URLSearchParams(searchParams.toString());
+        if (value) {
+          params.set('sort', JSON.stringify(value));
+        } else {
+          params.delete('sort');
+        }
+        setSearchParams(params, { replace: true });
+      }
+    },
+    [searchParams, setSearchParams, syncWithUrl],
+  );
+
   return {
     pagination,
     setPagination,
@@ -398,6 +449,9 @@ export function useApiPagination<T, E = unknown>(
     filters,
     setFilters: setFiltersState,
     setFilter,
+    // sort
+    sort,
+    setSort,
     refetch: refetch,
   } as const;
 }

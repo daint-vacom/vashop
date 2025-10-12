@@ -18,7 +18,7 @@ export function useBankNameColumn<T>({
   getBank,
   selectedValue,
   onChange,
-  id = 'bank',
+  id = 'bankCode',
   headerTitle = 'Ngân Hàng',
 }: Props<T>): ColumnDef<T> {
   const { data: banks } = useBankListQuery();
@@ -26,6 +26,7 @@ export function useBankNameColumn<T>({
   return useMemo<ColumnDef<T>>(
     () => ({
       id: id,
+      accessorFn: (row) => getBank(row)?.code,
       header: ({ column }) => (
         <DataGridColumnHeader
           title={headerTitle}

@@ -1,9 +1,14 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import IBankAccount from '@/features/category/bank-account/models/bank-account.model';
 import { useBankAccountTable } from '@/features/category/bank-account/providers/bank-account-table.provider';
-import { ColumnDef, RowSelectionState, Table } from '@tanstack/react-table';
+import {
+  ColumnDef,
+  RowSelectionState,
+  SortingState,
+  Table,
+} from '@tanstack/react-table';
 import { SquarePen, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -53,6 +58,7 @@ interface BankAccountTableProps {
 
 export function BankAccountTable({ onEdit, onDelete }: BankAccountTableProps) {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   const {
     data,
@@ -63,7 +69,17 @@ export function BankAccountTable({ onEdit, onDelete }: BankAccountTableProps) {
     setSearch,
     filters,
     setBankFilter,
+    sort,
+    setSort,
   } = useBankAccountTable();
+
+  useEffect(() => {
+    if (sort) {
+      setSorting([{ id: sort.selector, desc: sort.desc }]);
+    } else {
+      setSorting([]);
+    }
+  }, [sort]);
 
   // Columns
   const nameColumn = useBankNameColumn<IBankAccount>({
@@ -73,21 +89,25 @@ export function BankAccountTable({ onEdit, onDelete }: BankAccountTableProps) {
     }),
     selectedValue: filters['bankCode']?.value,
     onChange: (bank) => setBankFilter(bank?.code),
+    enableSorting: true,
   });
   const accNbrColumn = useStringColumn<IBankAccount>({
     getString: (row) => row.accNbr,
     id: 'accNbr',
     headerTitle: 'Số tài khoản',
+    enableSorting: true,
   });
   const ownerColumn = useStringColumn<IBankAccount>({
     getString: (row) => row.owner,
     id: 'owner',
     headerTitle: 'Chủ tài khoản',
+    enableSorting: true,
   });
   const branchColumn = useStringColumn<IBankAccount>({
     getString: (row) => row.branch || '',
     id: 'branch',
     headerTitle: 'Chi nhánh',
+    enableSorting: true,
   });
 
   const columns = useMemo<ColumnDef<IBankAccount>[]>(
@@ -135,6 +155,7 @@ export function BankAccountTable({ onEdit, onDelete }: BankAccountTableProps) {
     state: {
       rowSelection,
       pagination,
+      sorting,
       columnPinning: {
         right: ['actions'],
       },
@@ -146,6 +167,16 @@ export function BankAccountTable({ onEdit, onDelete }: BankAccountTableProps) {
     ),
     onPaginationChange: setPagination,
     onRowSelectionChange: setRowSelection,
+    onSortingChange: (updater) => {
+      const newSorting =
+        typeof updater === 'function' ? updater(sorting) : updater;
+      setSorting(newSorting);
+      const sortValue =
+        newSorting.length > 0
+          ? { selector: newSorting[0].id, desc: newSorting[0].desc }
+          : undefined;
+      setSort(sortValue);
+    },
   });
 
   return (
